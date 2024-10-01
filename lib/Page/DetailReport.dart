@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/widget/DetailReport/LaporanCard.dart';
 
 class DetailReport extends StatelessWidget {
   const DetailReport({super.key});
@@ -37,7 +38,7 @@ class DetailReport extends StatelessWidget {
                       )),
                       Container(
                         margin: EdgeInsets.only(right: 20),
-                        child: Text("Sedang Berlangsung", style: TextStyle(fontSize: 12),),
+                        child: Text("Sedang Berlangsung", style: TextStyle(fontSize: 11),),
                       )
                   ],
                 ),
@@ -54,10 +55,20 @@ class DetailReport extends StatelessWidget {
                     ),
                   ],
                 ),
-                    
+
+
               ],
             ),
-          )
+          ),
+                   Container(
+                    margin: EdgeInsets.only(top: 20),
+                    height: 400,
+                    decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    ),
+                     child:  LaporanWidget(),
+                   ) 
         ],
       ),
     );

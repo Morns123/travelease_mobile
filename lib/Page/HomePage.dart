@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/widget/homepage/CategoryFAQ.dart';
