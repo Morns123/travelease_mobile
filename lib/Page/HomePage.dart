@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
+import 'package:travelease_mobile/Page/pages/help_center_page/help_center.dart';
 import 'package:travelease_mobile/widget/homepage/CategoryFAQ.dart';
 import 'package:travelease_mobile/widget/homepage/Categorybase.dart';
 import 'package:travelease_mobile/widget/homepage/FAQ.dart';
@@ -76,7 +77,9 @@ class HomePage extends StatelessWidget {
                           fontFamily: "Montserrat-Bold"),
                     )),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCenterPage()));
+                  },
                   child: Container(
                       child: Row(
                     children: [

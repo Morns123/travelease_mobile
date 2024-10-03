@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/Page/pages/help_center_page/help_center.dart';
+import 'package:travelease_mobile/Page/pages/profile_page/profile.dart';
 
 class HomeApp extends StatelessWidget {
   const HomeApp({super.key});
@@ -24,15 +26,20 @@ class HomeApp extends StatelessWidget {
                             child: Text("TravelEase",style: TextStyle(color: Colors.white,fontSize: 23, fontFamily: "Montserrat-ExtraBold"),)
                             ),
                             SizedBox(width: 180,),
-                            Container(
-                              margin: EdgeInsets.only(top: 30),
-                              width: 45,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(50)
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 30),
+                                width: 45,
+                                height: 45,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: Icon(Icons.person,color: Colors.white,),
                               ),
-                              child: Icon(Icons.person,color: Colors.white,),
                             )
                         ],
                       ),
