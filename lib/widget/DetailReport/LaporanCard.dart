@@ -5,14 +5,14 @@ class LaporanWidget extends StatelessWidget {
     {
       'status': 'Laporan Ditutup',
       'description': 'Laporan Telah Selesai',
-      'date': '05 September 2024 10:21',
-      'isActive': true,
+      'date': 'null',
+      'isActive': false,
     },
     {
       'status': 'Laporan Selesai Ditangani',
       'description': 'Laporanmu ditandai “Selesai” oleh Customer Service',
       'date': '05 September 2024 10:21',
-      'isActive': false,
+      'isActive': true,
     },
     {
       'status': 'Laporan Diterima',
