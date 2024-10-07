@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/Page/ReportPage.dart';
 import '../components/chat_option.dart';
 import '../components/button_to_view.dart';
 import '../components/problem_category.dart';
@@ -216,7 +217,9 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
               ),
             ),
             ChatOption(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int ) {  },)));
+              },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
             ),
