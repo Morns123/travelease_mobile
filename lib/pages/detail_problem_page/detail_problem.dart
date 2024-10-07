@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/pages/components/button_article.dart';
 import '../components/chat_option.dart';
 
 class DetailProblemPage extends StatefulWidget {
@@ -158,54 +159,43 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                     const SizedBox(
                       height: 2,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: _isExpanded
-                            ? const Border(
-                                top: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              )
-                            : const Border(
-                                top: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          setState(() {
-                            _isExpanded = !_isExpanded;
-                          });
-                        },
-                        title: Text(
+                    ButtonArticle(
+                      onTap: () {
+                        setState(() {
+                          _isExpanded = !_isExpanded;
+                        });
+                      },
+                      title:
                           '[$title] Bagaimana cara menggunakan voucher saat checkout',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
+                      border: _isExpanded
+                          ? const Border(
+                              top: BorderSide(
+                                color: Color(0xff366389),
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              bottom: BorderSide(
+                                color: Color(0xff366389),
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                            )
+                          : const Border(
+                              top: BorderSide(
+                                color: Color(0xff969595),
+                                width: 1,
+                                style: BorderStyle.solid,
+                              ),
+                              bottom: BorderSide(
+                                color: Color(0xff969595),
+                                width: 1,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
