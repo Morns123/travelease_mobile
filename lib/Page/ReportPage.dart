@@ -22,11 +22,13 @@ class _ReportPageState extends State<ReportPage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(height: 30,),
+          
           Container(
+            height: 130,
             color: Colors.white,
             child: Column(
               children: [
+                SizedBox(height: 30,),
                 Row(
                   children: [
                     SizedBox(width: 15,),
@@ -41,6 +43,7 @@ class _ReportPageState extends State<ReportPage> {
                     )
                   ],
                 ),
+                SizedBox(height: 8,),
                 OpsiReport(onCategorySelected: (index) {
           _handleCategorySelection(index);
         },)
