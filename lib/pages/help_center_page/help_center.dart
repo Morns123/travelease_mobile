@@ -31,36 +31,30 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
         ),
         backgroundColor: Colors.white,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Container(
-              height: 35,
-              decoration: BoxDecoration(
-                color: const Color(0xffD9D9D9),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Cari',
-                  hintStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.black,
+          preferredSize: const Size.fromHeight(80),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffD9D9D9),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  border: InputBorder.none,
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Cari',
+                      hintStyle: TextStyle(color: Colors.black),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
-      body: Visibility(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -91,76 +85,114 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   ),
                 ),
               ),
-              ButtonToView(
-                size: const Size(double.infinity, 35),
-                icon: _showButtons
-                    ? Icons.keyboard_arrow_up_outlined
-                    : Icons.keyboard_arrow_down_outlined,
-                color: const Color(0xffffffff),
-                title: 'Promosi',
-                onPressed: () {
-                  setState(() {
-                    _showButtons = !_showButtons;
-                  });
-                },
-                outlinedBorder: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(0),
+            ],
+          ),
+        ),
+      ),
+      body: Visibility(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 130),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ButtonToView(
+                  size: const Size(double.infinity, 35),
+                  icon: _showButtons
+                      ? Icons.keyboard_arrow_up_outlined
+                      : Icons.keyboard_arrow_down_outlined,
+                  color: const Color(0xffffffff),
+                  title: 'Promosi',
+                  onPressed: () {
+                    setState(() {
+                      _showButtons = !_showButtons;
+                    });
+                  },
+                  outlinedBorder: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(0),
+                    ),
+                    side: _showButtons
+                        ? const BorderSide(
+                            color: Color(0xff366389),
+                            width: 1,
+                            style: BorderStyle.solid,
+                          )
+                        : BorderSide.none,
                   ),
-                  side: _showButtons
-                      ? const BorderSide(
-                          color: Color(0xff366389),
-                          width: 1,
-                          style: BorderStyle.solid,
-                        )
-                      : BorderSide.none,
                 ),
-              ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 0),
-                child: _showButtons
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 30,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          height: 400,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffffffff),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 0),
+                  child: _showButtons
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 30,
                           ),
-                          child: Column(
-                            children: [
-                              ButtonToProblemDetail(
-                                size: const Size(double.infinity, 35),
-                                color: const Color(0xffffffff),
-                                title:
-                                    '[$title] Bagaimana cara menggunakan kode voucher',
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/detail_problem',
-                                  );
-                                },
-                                outlinedBorder: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(0),
-                                  ),
-                                  side: BorderSide(
-                                    color: Color(0xffC1C1C1),
-                                    width: 1,
-                                    style: BorderStyle.solid,
+                          child: Container(
+                            width: double.infinity,
+                            height: 400,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffffffff),
+                            ),
+                            child: Column(
+                              children: [
+                                ButtonToProblemDetail(
+                                  size: const Size(double.infinity, 35),
+                                  color: const Color(0xffffffff),
+                                  title:
+                                      '[$title] Bagaimana cara menggunakan kode voucher',
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/detail_problem',
+                                    );
+                                  },
+                                  outlinedBorder: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(0),
+                                    ),
+                                    side: BorderSide(
+                                      color: Color(0xffC1C1C1),
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ),
-            ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                ButtonToView(
+                  size: const Size(double.infinity, 35),
+                  icon: _showButtons2
+                      ? Icons.keyboard_arrow_up_outlined
+                      : Icons.keyboard_arrow_down_outlined,
+                  color: const Color(0xffffffff),
+                  title: 'Program Berhadiah',
+                  onPressed: () {
+                    setState(() {
+                      _showButtons2 = !_showButtons2;
+                    });
+                  },
+                  outlinedBorder: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(0),
+                    ),
+                    side: _showButtons2
+                        ? const BorderSide(
+                            color: Color(0xff366389),
+                            width: 1,
+                            style: BorderStyle.solid,
+                          )
+                        : BorderSide.none,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
