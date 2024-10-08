@@ -29,7 +29,7 @@ class ButtonToProblemDetail extends StatelessWidget {
         child: Text(
           title,
           style: const TextStyle(
-            fontSize: 8,
+            fontSize: 11,
             fontWeight: FontWeight.w500,
             color: Color(0xff000000),
           ),

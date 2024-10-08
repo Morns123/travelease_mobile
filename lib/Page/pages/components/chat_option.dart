@@ -4,11 +4,13 @@ class ChatOption extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
   final Color color;
+  final Color? textColor;
   const ChatOption({
     super.key,
     required this.text,
     required this.onTap,
     required this.color,
+    required this.textColor,
   });
 
   @override
@@ -40,8 +42,10 @@ class ChatOption extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Text(
                 text,
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 13,
+                  color: textColor,
+                  fontFamily: "Montserrat-Bold",
                 ),
               ),
             )

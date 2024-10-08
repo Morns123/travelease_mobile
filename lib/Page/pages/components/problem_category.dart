@@ -16,13 +16,13 @@ class ProblemCategory extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onClick,
         style: const ButtonStyle(
-          minimumSize: WidgetStatePropertyAll(Size(80, 20)),
+          minimumSize: WidgetStatePropertyAll(Size(90, 30)),
           backgroundColor: WidgetStatePropertyAll(Color(0xff6799C3)),
         ),
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 8,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),

@@ -8,11 +8,22 @@ class HomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-            color: Color.fromRGBO(103, 153, 195, 1),
+        decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [Color.fromRGBO(103, 153, 195, 1), Color.fromRGBO(194, 223, 248, 1)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight
+        )
+      ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  color: Color.fromRGBO(103, 153, 195, 1),
+                  decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [Color.fromRGBO(103, 153, 195, 1), Color.fromRGBO(194, 223, 248, 1)],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight
+        )
+      ),
                   height: 165,       
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -21,10 +32,18 @@ class HomeApp extends StatelessWidget {
                       Row(
                        
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 24,left: 20),
-                            child: Text("TravelEase",style: TextStyle(color: Colors.white,fontSize: 23, fontFamily: "Montserrat-ExtraBold"),)
-                            ),
+                        
+                             Container(
+                              margin: EdgeInsets.only(top: 24,),
+                              child: ShaderMask(
+                                shaderCallback: (bounds) => LinearGradient(
+                                  colors: [Color.fromRGBO(228, 243, 255, 1), Colors.white],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  ).createShader(bounds),
+                                child: Text("TravelEase",style: TextStyle(color: Colors.white,fontSize: 23, fontFamily: "Montserrat-ExtraBold"),))
+                              ),
+                          
                             SizedBox(width: 180,),
                             InkWell(
                               onTap: () {
@@ -35,7 +54,7 @@ class HomeApp extends StatelessWidget {
                                 width: 45,
                                 height: 45,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
+                                  color: const Color.fromARGB(255, 147, 187, 221),
                                   borderRadius: BorderRadius.circular(50)
                                 ),
                                 child: Icon(Icons.person,color: Colors.white,),
@@ -46,7 +65,7 @@ class HomeApp extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(left: 20,top: 20),
+                              margin: EdgeInsets.only(top: 20),
                               width: 370,
                               height: 45,
                               decoration: BoxDecoration(

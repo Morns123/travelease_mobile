@@ -14,13 +14,16 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
+  
   Widget displaywidget = Sdg_BerlangsungWiget();
   bool isLoading = false;
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       body: Column(
+      
         children: [
           
           Container(

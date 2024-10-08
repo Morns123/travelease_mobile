@@ -14,11 +14,11 @@ class Categoryfaq extends StatelessWidget {
               children: [
                 CustomContainer(label: 'Recommended', isOutlined: true),
                 SizedBox(width: 10),
-                CustomContainer(label: 'Penawaran & Promo'),
+                CustomContainer(label: 'Penawaran & Promo',color: Colors.green,),
                 SizedBox(width: 10),
-                CustomContainer(label: 'Refund'),
+                CustomContainer(label: 'Refund',color: const Color.fromARGB(255, 27, 99, 157),),
                 SizedBox(width: 10),
-                CustomContainer(label: 'Supir Bermasalah'),
+                CustomContainer(label: 'Supir Bermasalah',color: Colors.red,),
               ],
             ),
           );
@@ -28,8 +28,9 @@ class Categoryfaq extends StatelessWidget {
 class CustomContainer extends StatelessWidget {
   final String label;
   final bool isOutlined;
+  final Color? color;
 
-  CustomContainer({required this.label, this.isOutlined = false});
+  CustomContainer({required this.label, this.isOutlined = false, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class CustomContainer extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: isOutlined ? Colors.transparent : Color.fromRGBO(103, 153, 195, 1),
+          color: isOutlined ? Colors.transparent : color,
           border: isOutlined ? Border.all(color: Color.fromRGBO(54, 99, 137, 1)) : null,
           borderRadius: BorderRadius.circular(20),
         ),
@@ -49,7 +50,7 @@ class CustomContainer extends StatelessWidget {
             margin: EdgeInsets.only(left: 20,right: 20),
             child: Text(
               label,
-              style: TextStyle(color: isOutlined ? Color.fromRGBO(54, 99, 137, 1) : Colors.white),
+              style: TextStyle(color: isOutlined ? Color.fromRGBO(54, 99, 137, 1) : Colors.white,fontWeight: FontWeight.w500),
             ),
           ),
         ),

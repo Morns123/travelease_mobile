@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
                       "Laporan Teratas",
                       style: TextStyle(
                           fontSize: 15,
-                          color: Color.fromRGBO(54, 99, 137, 1),
+                          color: Colors.black,
                           fontFamily: "Montserrat-Bold"),
                     )),
                 InkWell(
@@ -43,10 +43,10 @@ class HomePage extends StatelessWidget {
                         "Riwayat Laporan",
                         style: TextStyle(
                             fontSize: 15,
-                            color: Color.fromRGBO(54, 99, 137, 0.73),
+                            color:  Colors.black38,
                             fontFamily: "Montserrat-Bold"),
                       ),
-                      Icon(Icons.keyboard_arrow_right)
+                      Icon(Icons.keyboard_arrow_right,color: Colors.black38)
                     ],
                   )),
                 ),
@@ -68,35 +68,35 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: const Text(
                       "FAQ",
                       style: TextStyle(
                           fontSize: 15,
-                          color: Color.fromRGBO(54, 99, 137, 1),
+                          color: Colors.black,
                           fontFamily: "Montserrat-Bold"),
                     )),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCenterPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpCenterPage()));
                   },
                   child: Container(
-                      child: Row(
+                      child: const Row(
                     children: [
                       Text(
                         "Lihat Semua",
                         style: TextStyle(
                             fontSize: 15,
-                            color: Color.fromRGBO(54, 99, 137, 0.73),
+                            color: Colors.black38,
                             fontFamily: "Montserrat-Bold"),
                       ),
-                      Icon(Icons.keyboard_arrow_right)
+                      Icon(Icons.keyboard_arrow_right,color: Colors.black38,)
                     ],
                   )),
                 ),
               ],
             ),
-            SizedBox(
+           const SizedBox(
               height: 10,
             ),
             const Categoryfaq(),
@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.only(left: 10),
-                child: Text("Hubungi Kami", style: TextStyle(fontSize: 18,color: Color.fromRGBO(103, 153, 195, 1),fontFamily: "Montserrat-Bold"),))
+                child: Text("Hubungi Kami", style: TextStyle(fontSize: 18,color: Color.fromRGBO(30, 71, 105, 1),fontFamily: "Montserrat-Bold"),))
             ],
           ),
           Row(

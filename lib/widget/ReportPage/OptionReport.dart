@@ -13,24 +13,27 @@ class _MyWidgetState extends State<OpsiReport> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 400,
-                      child:
-                          ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              _buildcategory("Sedang Berlangsung", 0),
-                              _buildcategory("Ditutup", 1),
-                            ],
-                          ),
-                      
-                    ),
-                  ],
-                );
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 400,
+                        child:
+                            ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                _buildcategory("Sedang Berlangsung", 0),
+                                _buildcategory("Ditutup", 1),
+                              ],
+                            ),
+                        
+                      ),
+                    ],
+                  ),
+    );
   }
   Widget _buildcategory(String category, int index) {
   return InkWell(

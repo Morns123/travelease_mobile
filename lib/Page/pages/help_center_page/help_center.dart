@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
+import 'package:travelease_mobile/Page/pages/detail_problem_page/detail_problem.dart';
 import '../components/chat_option.dart';
 import '../components/button_to_view.dart';
 import '../components/problem_category.dart';
@@ -145,10 +146,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                                   title:
                                       '[$title] Bagaimana cara menggunakan kode voucher',
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/detail_problem',
-                                    );
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailProblemPage()));
                                   },
                                   outlinedBorder: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -222,11 +220,13 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
               },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
+              textColor: const Color(0xffC73437),
             ),
             ChatOption(
               onTap: () {},
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
+              textColor: Color.fromRGBO(61, 96, 125, 1),
             ),
           ],
         ),
