@@ -64,7 +64,7 @@ class DetailReport extends StatelessWidget {
                     margin: EdgeInsets.only(top: 20),
                     height: 400,
                     decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color.fromARGB(255, 201, 68, 58),
                     borderRadius: BorderRadius.circular(20),
                     ),
                      child:  LaporanWidget(),

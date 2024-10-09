@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
+import 'package:travelease_mobile/Page/chat_bot.dart';
 import 'package:travelease_mobile/Page/pages/help_center_page/help_center.dart';
 import 'package:travelease_mobile/widget/homepage/CategoryFAQ.dart';
 import 'package:travelease_mobile/widget/homepage/Categorybase.dart';
@@ -115,23 +116,28 @@ class HomePage extends StatelessWidget {
                 child: Text("Hubungi Kami", style: TextStyle(fontSize: 18,color: Color.fromRGBO(30, 71, 105, 1),fontFamily: "Montserrat-Bold"),))
             ],
           ),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 10,left: 15),
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                color: Color.fromRGBO(103, 153, 195, 1),
-                borderRadius: BorderRadius.circular(50)
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
+            }, 
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 10,left: 15),
+                  width: 55,
+                  height: 55,
+                  decoration: BoxDecoration(
+                  color: Color.fromRGBO(103, 153, 195, 1),
+                  borderRadius: BorderRadius.circular(50)
+                  ),
+                  child: Icon(Icons.chat_bubble_outline,color: Colors.white,)
                 ),
-                child: Icon(Icons.chat_bubble_outline,color: Colors.white,)
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 20),
-                child: Text('Chat Dengan TravleMate',style: TextStyle(color: Color.fromRGBO(103, 153, 195, 1), fontSize: 16, fontFamily: "Montserrat-Bold"),),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: Text('Chat Dengan TravleMate',style: TextStyle(color: Color.fromRGBO(103, 153, 195, 1), fontSize: 16, fontFamily: "Montserrat-Bold"),),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: 25,)
           ],

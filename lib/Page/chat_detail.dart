@@ -35,7 +35,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   TextEditingController _controller = TextEditingController();
   Timer? _hideButtonTimer;
   bool _isButtonVisible = true;
-  bool _isChatClosed = false;
+  bool _isChatClosed = true;
 
   @override
   void dispose() {
@@ -151,66 +151,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 return _buildMessageBubble(messages[index]);
               },
             ),
-            if (_isButtonVisible && !_isChatClosed)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 70, left:15),
-                  height: 30,
-                  width: 70,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFF3C729A), width: 1.0),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: FloatingActionButton(
-                    onPressed: _closeChat,
-                    child: Text(
-                      "Selesai",
-                      style: TextStyle(
-                        color: Color(0xFF3C729A),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                  ),
-                ),
-              ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: !_isChatClosed
-                  ? Container(
-                      padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                      height: 60,
-                      width: double.infinity,
-                      color: Color(0xFF3C729A),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: _controller,
-                              decoration: InputDecoration(
-                                  hintText: "Tulis pesan di sini...",
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  border: InputBorder.none),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          FloatingActionButton(
-                            onPressed: _sendMessage,
-                            child: Icon(
-                              Icons.send,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                            backgroundColor: Colors.transparent,
-                            elevation: 0,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container(),
-            ),
+          
+          
           ],
         ),
       ),

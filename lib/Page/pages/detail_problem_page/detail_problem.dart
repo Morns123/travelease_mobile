@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/Page/ReportPage.dart';
+import 'package:travelease_mobile/Page/chat_bot.dart';
 import 'package:travelease_mobile/Page/pages/components/button_article.dart';
 import '../components/chat_option.dart';
 
@@ -260,13 +262,19 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
               ),
             ),
             ChatOption(
-              onTap: () {},
+              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int ) {  },)));
+
+              },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
               textColor: const Color(0xffC73437),
             ),
             ChatOption(
-              onTap: () {},
+              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
+
+              },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
               textColor: Color.fromRGBO(61, 96, 125, 1),

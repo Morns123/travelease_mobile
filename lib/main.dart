@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/DetailReport.dart';
 import 'package:travelease_mobile/Page/HomePage.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
+import 'package:travelease_mobile/Page/chat_bot.dart';
+import 'package:travelease_mobile/Page/chat_detail.dart';
 
 void main() {
   runApp(const MyApp());

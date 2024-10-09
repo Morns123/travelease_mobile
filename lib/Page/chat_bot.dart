@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ChatMessage {
@@ -91,8 +93,8 @@ class _ChatBotState extends State<ChatBot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      leadingWidth: 400,
         backgroundColor: Color(0xFF3C729A),
-        leadingWidth: 2,
         leading: Row(
           children: [
               IconButton(
@@ -101,17 +103,22 @@ class _ChatBotState extends State<ChatBot> {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(width: 1),
-              CircleAvatar(
-                radius: 25, 
-                backgroundImage: NetworkImage("https://randomuser.me/api/portraits/women/44.jpg"), 
+              Container(
+                margin: EdgeInsets.only(bottom: 12),
+                child: CircleAvatar(
+                  radius: 25, 
+                  backgroundImage: NetworkImage("https://randomuser.me/api/portraits/women/44.jpg"), 
+                ),
               ),
               SizedBox(width: 10,),
-              Text("BOT EZ",
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 238, 238, 238),
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
+              Container(
+                margin: EdgeInsets.only(bottom: 12),
+                child: Text("BOT EZ",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 238, 238, 238),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -142,6 +149,7 @@ class _ChatBotState extends State<ChatBot> {
                   borderRadius: BorderRadius.circular(15), 
                 ),
                 child: FloatingActionButton(
+                  heroTag: "chatCsButton",
                   onPressed: () {},
                   child: Text(
                     "Chat CS",

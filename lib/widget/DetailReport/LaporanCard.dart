@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/Page/chat_detail.dart';
 
 class LaporanWidget extends StatelessWidget {
   final List<Map<String, dynamic>> laporanData = [
@@ -46,9 +47,14 @@ class LaporanWidget extends StatelessWidget {
                 );
               }).toList(),
               SizedBox(height: 20),
-              Text(
-                '#Riwayat Chat',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatDetailPage()));
+                },
+                child: Text(
+                  '#Riwayat Chat',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 201, 68, 58)),
+                ),
               ),
             ],
           ),
