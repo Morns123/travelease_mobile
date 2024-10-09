@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travelease_mobile/pages/components/button_article.dart';
+import '../components/button_article.dart';
 import '../components/chat_option.dart';
 
 class DetailProblemPage extends StatefulWidget {
