@@ -38,7 +38,7 @@ class DetailReport extends StatelessWidget {
                       )),
                       Container(
                         margin: EdgeInsets.only(right: 20),
-                        child: Text("Sedang Berlangsung", style: TextStyle(fontSize: 11),),
+                        child: Text("Sedang Berlangsung", style: TextStyle(fontSize: 11,color: Color.fromRGBO(90, 235, 76, 1)),),
                       )
                   ],
                 ),

@@ -15,6 +15,7 @@ class HelpCenterPage extends StatefulWidget {
 }
 
 class _HelpCenterPageState extends State<HelpCenterPage> {
+
   bool _showButtons = false;
   bool _showButtons2 = false;
   final String title = 'Voucher';
