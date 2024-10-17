@@ -46,6 +46,13 @@ class _ChatBotState extends State<ChatBot> {
     "Destinasi",
   ];
 
+  final List<Color> categoryColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red, 
+  Colors.orange, 
+  ];
+
   TextEditingController _controller = TextEditingController();
 
   @override
@@ -271,51 +278,57 @@ class _ChatBotState extends State<ChatBot> {
     );
   }
 
-  // widget tampilan kist categort
+  // widget tampilan list kategori
   Widget _buildCategoryList() {
-    return Container(
-      height: 50,
-      margin: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return CategoryItem(
-            categoryName: categories[index],
-            onClick: _onCategoryClick,
-          );
-        },
-      ),
-    );
-  }
+  return Container(
+   height: 40,
+   margin: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+   child: ListView.builder(
+    scrollDirection: Axis.horizontal,
+    itemCount: categories.length,
+    itemBuilder: (context, index) {
+     return CategoryItem(
+      categoryName: categories[index],
+      onClick: _onCategoryClick,
+      backgroundColor: categoryColors[index], 
+     );
+    },
+   ),
+  );
+ }
 }
 
-// widget category
 class CategoryItem extends StatelessWidget {
-  final String categoryName;
-  final Function(String) onClick;
+ final String categoryName;
+ final Function(String) onClick;
+ final Color backgroundColor; 
 
-  const CategoryItem({Key? key, required this.categoryName, required this.onClick}) : super(key: key);
+ const CategoryItem({
+  Key? key,
+  required this.categoryName,
+  required this.onClick,
+  required this.backgroundColor, 
+ }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ElevatedButton(
-        onPressed: () {
-          onClick(categoryName); // kek paste
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue, 
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: Text(
-          categoryName,
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+ @override
+ Widget build(BuildContext context) {
+  return Padding(
+   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+   child: ElevatedButton(
+    onPressed: () {
+     onClick(categoryName);
+    },
+    style: ElevatedButton.styleFrom(
+     backgroundColor: backgroundColor, 
+     shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+     ),
+    ),
+    child: Text(
+     categoryName,
+     style: TextStyle(color: Colors.white),
+    ),
+   ),
+  );
+ }
 }
