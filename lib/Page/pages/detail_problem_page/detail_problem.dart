@@ -263,7 +263,8 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
             ),
             ChatOption(
               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int ) {  },)));
+                                // ignore: avoid_types_as_parameter_names
+                                Navigator.push(context, MaterialPageRoute(builder: (context) =>  ReportPage(onCategorySelected: (int ) {  },)));
 
               },
               text: 'Pertanyaan Saya',
@@ -277,7 +278,7 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
               },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
-              textColor: Color.fromRGBO(61, 96, 125, 1),
+              textColor: const Color.fromRGBO(61, 96, 125, 1),
             ),
           ],
         ),
