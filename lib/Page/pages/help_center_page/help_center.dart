@@ -18,6 +18,8 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
 
   bool _showButtons = false;
   bool _showButtons2 = false;
+  String selectedCategory = '';
+
   final String title = 'Voucher';
 
   @override
@@ -67,25 +69,20 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ProblemCategory(
-                        onClick: () {},
-                        text: 'Penawaran & Promo',
-                      ),
-                      ProblemCategory(
-                        onClick: () {},
-                        text: 'Refund',
-                      ),
-                      ProblemCategory(
-                        onClick: () {},
-                        text: 'Supir Bermasalah',
-                      ),
-                      ProblemCategory(
-                        onClick: () {},
-                        text: 'Informasi Umur',
-                      ),
+                  child: ProblemCategory(
+                    buttonLabels: [
+                      'Penawaran & Promo',
+                      'Refund',
+                      'Supir Bermasalah',
+                      'Informasi Umur'
                     ],
+                    onSelected: (String category) {
+                      setState(() {
+                        selectedCategory = category;
+                        _showButtons = false;
+                        _showButtons2 = false;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -93,14 +90,14 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
           ),
         ),
       ),
-      body: Visibility(
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 130),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 130),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              if (selectedCategory == 'Penawaran & Promo') ...[
                 ButtonToView(
                   size: const Size(double.infinity, 35),
                   icon: _showButtons
@@ -127,7 +124,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   ),
                 ),
                 AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 0),
+                  duration: const Duration(milliseconds: 300),
                   child: _showButtons
                       ? Padding(
                           padding: const EdgeInsets.symmetric(
@@ -148,7 +145,11 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                                   title:
                                       '[$title] Bagaimana cara menggunakan kode voucher',
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailProblemPage()));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const DetailProblemPage()));
                                   },
                                   outlinedBorder: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -192,8 +193,30 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                         : BorderSide.none,
                   ),
                 ),
+              ] else if (selectedCategory == 'Refund') ...[
+                ButtonToView(
+                  size: const Size(double.infinity, 35),
+                  icon: _showButtons
+                      ? Icons.keyboard_arrow_up_outlined
+                      : Icons.keyboard_arrow_down_outlined,
+                  color: const Color(0xffffffff),
+                  title: '....',
+                  onPressed: () {},
+                  outlinedBorder: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(0),
+                    ),
+                    side: _showButtons
+                        ? const BorderSide(
+                            color: Color(0xff366389),
+                            width: 1,
+                            style: BorderStyle.solid,
+                          )
+                        : BorderSide.none,
+                  ),
+                ),
               ],
-            ),
+            ],
           ),
         ),
       ),
@@ -218,7 +241,12 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
             ),
             ChatOption(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int ) {  },)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportPage(
+                              onCategorySelected: (int) {},
+                            )));
               },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
@@ -226,7 +254,8 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
             ),
             ChatOption(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatBot()));
               },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
