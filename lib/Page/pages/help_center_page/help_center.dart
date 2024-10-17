@@ -18,7 +18,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
 
   bool _showButtons = false;
   bool _showButtons2 = false;
-  String selectedCategory = '';
+  String selectedCategory = 'Penawaran & Promo'; // Inisialisasi default
 
   final String title = 'Voucher';
 
@@ -32,6 +32,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
           style: TextStyle(
             color: Color(0xff366389),
             fontSize: 20,
+            fontFamily: "Montserrat-Bold",
             fontWeight: FontWeight.w900,
           ),
         ),
@@ -51,10 +52,10 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   child: const TextField(
                     decoration: InputDecoration(
                       hintText: 'Cari',
-                      hintStyle: TextStyle(color: Colors.black),
+                      hintStyle: TextStyle(color: Color.fromARGB(255, 197, 197, 197)),
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Colors.black,
+                        color: Color.fromARGB(255, 154, 154, 154),
                       ),
                       border: InputBorder.none,
                     ),
@@ -70,11 +71,10 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: ProblemCategory(
-                    buttonLabels: [
-                      'Penawaran & Promo',
-                      'Refund',
-                      'Supir Bermasalah',
-                      'Informasi Umur'
+                    categories: [
+                      Category(name: 'Penawaran & Promo', color: Colors.green),
+                      Category(name: 'Panduan', color: Colors.orange),
+                      Category(name: 'Umum', color: Colors.purple),
                     ],
                     onSelected: (String category) {
                       setState(() {
@@ -91,15 +91,16 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 130),
+        padding: const EdgeInsets.only(bottom: 30),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (selectedCategory == 'Penawaran & Promo') ...[
+                SizedBox(height: 1,),
                 ButtonToView(
-                  size: const Size(double.infinity, 35),
+                  size: const Size(double.infinity, 47),
                   icon: _showButtons
                       ? Icons.keyboard_arrow_up_outlined
                       : Icons.keyboard_arrow_down_outlined,
@@ -128,7 +129,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   child: _showButtons
                       ? Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 15,
+                            vertical: 5, // Reduced from 15 to 5
                             horizontal: 30,
                           ),
                           child: Container(
@@ -142,14 +143,15 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                                 ButtonToProblemDetail(
                                   size: const Size(double.infinity, 35),
                                   color: const Color(0xffffffff),
-                                  title:
-                                      '[$title] Bagaimana cara menggunakan kode voucher',
+                                  title: '[$title] Bagaimana cara menggunakan kode voucher',
                                   onPressed: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const DetailProblemPage()));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DetailProblemPage(),
+                                      ),
+                                    );
                                   },
                                   outlinedBorder: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -169,7 +171,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                       : const SizedBox.shrink(),
                 ),
                 ButtonToView(
-                  size: const Size(double.infinity, 35),
+                  size: const Size(double.infinity, 47),
                   icon: _showButtons2
                       ? Icons.keyboard_arrow_up_outlined
                       : Icons.keyboard_arrow_down_outlined,
@@ -185,28 +187,6 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                       Radius.circular(0),
                     ),
                     side: _showButtons2
-                        ? const BorderSide(
-                            color: Color(0xff366389),
-                            width: 1,
-                            style: BorderStyle.solid,
-                          )
-                        : BorderSide.none,
-                  ),
-                ),
-              ] else if (selectedCategory == 'Refund') ...[
-                ButtonToView(
-                  size: const Size(double.infinity, 35),
-                  icon: _showButtons
-                      ? Icons.keyboard_arrow_up_outlined
-                      : Icons.keyboard_arrow_down_outlined,
-                  color: const Color(0xffffffff),
-                  title: '....',
-                  onPressed: () {},
-                  outlinedBorder: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(0),
-                    ),
-                    side: _showButtons
                         ? const BorderSide(
                             color: Color(0xff366389),
                             width: 1,
@@ -236,17 +216,20 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat-Bold"
                 ),
               ),
             ),
             ChatOption(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReportPage(
-                              onCategorySelected: (int) {},
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReportPage(
+                      onCategorySelected: (int) {},
+                    ),
+                  ),
+                );
               },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
@@ -254,12 +237,14 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
             ),
             ChatOption(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatBot()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatBot()),
+                );
               },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
-              textColor: Color.fromRGBO(61, 96, 125, 1),
+              textColor: const Color.fromRGBO(61, 96, 125, 1),
             ),
           ],
         ),
@@ -268,3 +253,4 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
     );
   }
 }
+

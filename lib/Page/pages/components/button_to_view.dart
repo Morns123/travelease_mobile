@@ -32,7 +32,7 @@ class ButtonToView extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Color(0xff000000),
             ),

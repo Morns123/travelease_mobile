@@ -7,6 +7,7 @@ class Sdg_BerlangsungWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => DetailReport()));

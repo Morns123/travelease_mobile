@@ -1,31 +1,53 @@
 import 'package:flutter/material.dart';
 
-class ProblemCategory extends StatefulWidget {
-  final List<String> buttonLabels;
-  final ValueChanged<String> onSelected;
+class Category {
+  final String name;
+  final Color color;
 
-  const ProblemCategory(
-      {super.key, required this.buttonLabels, required this.onSelected});
+  Category({required this.name, required this.color});
+}
+
+class ProblemCategory extends StatefulWidget {
+  final List<Category> categories;
+  final ValueChanged<String> onSelected;
+  final int defaultSelectedIndex; // Tambahkan parameter defaultSelectedIndex
+
+  const ProblemCategory({
+    super.key,
+    required this.categories,
+    required this.onSelected,
+    this.defaultSelectedIndex = 0, // Default category pertama terpilih
+  });
 
   @override
   _ProblemCategoryState createState() => _ProblemCategoryState();
 }
 
 class _ProblemCategoryState extends State<ProblemCategory> {
-  int selectedButtonIndex = -1;
+  late int selectedButtonIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedButtonIndex = widget.defaultSelectedIndex;
+    // Panggil callback dengan category default yang dipilih
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onSelected(widget.categories[selectedButtonIndex].name);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: widget.buttonLabels.asMap().entries.map((entry) {
+      children: widget.categories.asMap().entries.map((entry) {
         int index = entry.key;
-        String label = entry.value;
-        return buildButton(index, label);
+        Category category = entry.value;
+        return buildButton(index, category);
       }).toList(),
     );
   }
 
-  Widget buildButton(int index, String text) {
+  Widget buildButton(int index, Category category) {
     bool isSelected = selectedButtonIndex == index;
 
     return Padding(
@@ -35,20 +57,23 @@ class _ProblemCategoryState extends State<ProblemCategory> {
           setState(() {
             selectedButtonIndex = index;
           });
-          widget.onSelected(text); // Panggil callback di sini
+          widget.onSelected(category.name); // Panggil callback saat tombol diklik
         },
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll(Size(90, 30)),
-          backgroundColor: WidgetStatePropertyAll(
-            isSelected ? Colors.white : const Color(0xff6799C3),
+          minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
+          backgroundColor: MaterialStatePropertyAll(
+            isSelected ? Colors.white : category.color,
           ),
+          side: isSelected
+              ? MaterialStatePropertyAll(BorderSide(color: category.color, width: 2))
+              : MaterialStatePropertyAll(BorderSide.none),
         ),
         child: Text(
-          text,
+          category.name,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.black : Colors.white,
+            color: isSelected ? category.color : Colors.white,
           ),
         ),
       ),

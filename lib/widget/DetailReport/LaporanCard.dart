@@ -99,7 +99,7 @@ class LaporanCard extends StatelessWidget {
             if (showLine)
               Container(
                 width: 2,
-                height: 70, 
+                height: 80, 
                 color: Colors.grey,
               ),
           ],

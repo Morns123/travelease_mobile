@@ -20,12 +20,11 @@ class _ReportPageState extends State<ReportPage> {
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: Column(
       
         children: [
-          
           Container(
             height: 130,
             color: Colors.white,

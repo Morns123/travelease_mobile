@@ -7,13 +7,15 @@ class DetailReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: Column(
         children: [
-          SizedBox(height: 30,),
+       
           Container(
             color: Colors.white,
             child: Column(
               children: [
+                SizedBox(height: 30,),
                 Row(
                   children: [
                     SizedBox(width: 15,),
