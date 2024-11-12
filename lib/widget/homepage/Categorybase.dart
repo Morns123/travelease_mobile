@@ -10,17 +10,17 @@ class Categorybase extends StatelessWidget {
                 spacing: 8.0,
             runSpacing: 8.0, 
               children: [
-               _buildChip(Icons.directions_car, 'Lacak Kendaraan'),
-              _buildChip(Icons.cancel, 'Batalkan Pesanan'),
-              _buildChip(Icons.monetization_on, 'Pengembalian Dana'),
-              _buildChip(Icons.check_circle, 'Konfirmasi Pesanan'),
-              _buildChip(Icons.person, 'Mengubah Profile'),
-              _buildChip(Icons.schedule, 'Perubahan Jadwal'),
+               _buildChip(Icons.directions_car, 'Lacak Kendaraan',Colors.blueGrey),
+              _buildChip(Icons.cancel, 'Batalkan Pesanan',Colors.redAccent),
+              _buildChip(Icons.monetization_on, 'Pengembalian Dana',Colors.amber),
+              _buildChip(Icons.check_circle, 'Konfirmasi Pesanan',Colors.green),
+              _buildChip(Icons.person, 'Mengubah Profile',Colors.blueAccent),
+              _buildChip(Icons.schedule, 'Perubahan Jadwal',const Color.fromARGB(255, 1, 1, 4)),
               ],
             );
   }
 }
-Widget _buildChip(IconData icon, String label) {
+Widget _buildChip(IconData icon, String label,Color? color) {
     return Chip(
       backgroundColor: Colors.white,
       side: BorderSide.none,
@@ -33,7 +33,7 @@ Widget _buildChip(IconData icon, String label) {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon,color: Color.fromRGBO(103, 153, 195, 1),),
+            Icon(icon,color: color,),
             SizedBox(height: 4.0), // Jarak vertikal antara ikon dan teks
             Text(label,
             overflow: TextOverflow.ellipsis,
