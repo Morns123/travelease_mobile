@@ -20,31 +20,31 @@ class _RecommendedState extends State<Recommended> {
                   CustomContainer(
                       label:
                           "Apakah harga yang tercantum sudah termasuk pajak dan biaya lainnya?",
-                      category: "[Transaksi]"),
+                    ),
                   CustomContainer(
                       label:
                           "Apakah harga yang tercantum sudah termasuk pajak dan biaya lainnya?",
-                      category: "[Refund]"),
+                      ),
                   CustomContainer(
                       label:
                           "Apakah saya memerlukan visa untuk bepergian ke negara tertentu?",
-                      category: "[Transaksi]"),
+                      ),
                   CustomContainer(
                       label:
                           "Bagaimana cara memesan tiket perjalanan melalui aplikasi?",
-                      category: "[Tiket]"),
+                      ),
                   CustomContainer(
                       label:
                           "Apakah aplikasi mendukung pemesanan untuk beberapa moda transportasi (pesawat, kereta, bus)?",
-                      category: "[Transportasi]"),
+                      ),
                   CustomContainer(
                       label:
                           "Bagaimana cara memesan tiket perjalanan melalui aplikasi?",
-                      category: "[Tiket]"),
+                      ),
                   CustomContainer(
                       label:
                           "Apakah aplikasi mendukung pemesanan untuk beberapa moda transportasi (pesawat, kereta, bus)?",
-                      category: "[Transportasi]"),
+                      ),
                 ],
               ),
             );

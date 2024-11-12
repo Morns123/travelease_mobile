@@ -20,11 +20,11 @@ class _PanduanState extends State<Panduan> {
         children: [
           CustomContainer(
               label: "Bagaimana cara memesan tiket melalui aplikasi?",
-              category: "[Panduan]"),
+              ),
               
           CustomContainer(
               label: "Cara membatalkan pemesanan tiket.",
-              category: "[Panduan]"),
+              ),
           // Tambahkan pertanyaan lainnya sesuai kebutuhan
         ],
       ),

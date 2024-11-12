@@ -138,33 +138,38 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                             decoration: const BoxDecoration(
                               color: Color(0xffffffff),
                             ),
-                            child: Column(
-                              children: [
-                                ButtonToProblemDetail(
-                                  size: const Size(double.infinity, 35),
-                                  color: const Color(0xffffffff),
-                                  title: '[$title] Bagaimana cara menggunakan kode voucher',
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DetailProblemPage(),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProblemPage()));
+                              },
+                              child: Column(
+                                children: [
+                                  ButtonToProblemDetail(
+                                    size: const Size(double.infinity, 35),
+                                    color: const Color(0xffffffff),
+                                    title: '[$title] Bagaimana cara menggunakan kode voucher',
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const DetailProblemPage(),
+                                        ),
+                                      );
+                                    },
+                                    outlinedBorder: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(0),
                                       ),
-                                    );
-                                  },
-                                  outlinedBorder: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(0),
-                                    ),
-                                    side: BorderSide(
-                                      color: Color(0xffC1C1C1),
-                                      width: 1,
-                                      style: BorderStyle.solid,
+                                      side: BorderSide(
+                                        color: Color(0xffC1C1C1),
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         )

@@ -19,16 +19,16 @@ class _PenawaranState extends State<Penawaran> {
         children: [
           CustomContainer(
               label: "Bagaimana cara menggunakan kode voucher",
-              category: "[Voucher]"),
+              ),
           CustomContainer(
               label: "Promo 1: Diskon 50% untuk semua penerbangan.",
-              category: "[Promo]"),
+              ),
           CustomContainer(
               label: "Promo 2: Beli 1 tiket kereta, dapatkan 1 tiket bus gratis.",
-              category: "[Promo]"),
+              ),
           CustomContainer(
               label: "Penawaran spesial untuk liburan akhir tahun.",
-              category: "[Penawaran]"),
+              ),
         ],
       ),
     );

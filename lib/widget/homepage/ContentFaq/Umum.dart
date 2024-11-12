@@ -19,10 +19,10 @@ class _UmumState extends State<Umum> {
         children: [
           CustomContainer(
               label: "Apa saja metode pembayaran yang diterima?",
-              category: "[Umum]"),
+              ),
           CustomContainer(
               label: "Bagaimana cara mengubah profil saya?",
-              category: "[Umum]"),
+              ),
           // Tambahkan pertanyaan lainnya sesuai kebutuhan
         ],
       ),

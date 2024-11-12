@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/pages/detail_problem_page/detail_problem.dart';
 
 class CustomContainer extends StatelessWidget {
-  final String category;
   final String label;
 
-  CustomContainer({required this.label, required this.category});
+  CustomContainer({required this.label,});
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +26,8 @@ class CustomContainer extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              margin: EdgeInsets.only(left: 7),
-              child: Text(
-                category,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(width: 5),
+           
+            SizedBox(width: 20),
             Expanded(
               child: Text(
                 label,
