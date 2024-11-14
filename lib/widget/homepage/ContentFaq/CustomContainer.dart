@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/pages/detail_problem_page/detail_problem.dart';
 
 class CustomContainer extends StatelessWidget {
-  final String category;
+
   final String label;
 
-  CustomContainer({required this.label, required this.category});
+  CustomContainer({required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +14,7 @@ class CustomContainer extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProblemPage()));
       },
       child: Container(
+        
         height: 50,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -27,20 +28,17 @@ class CustomContainer extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              margin: EdgeInsets.only(left: 7),
-              child: Text(
-                category,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-            ),
+            
             SizedBox(width: 5),
             Expanded(
-              child: Text(
-                label,
-                style: TextStyle(fontSize: 12),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              child: Container(
+                margin: EdgeInsets.only(left: 15),
+                child: Text(
+                  label,
+                  style: TextStyle(fontSize: 12),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ],

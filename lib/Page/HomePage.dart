@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget displayWidget = Recommended();
+  Widget displayWidget = Recommended(categoryId: 4,);
   bool isLoading = false;
   int selectedIndex = 0;
 
@@ -205,19 +205,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       switch (opsi) {
         case 0:
-          displayWidget = Recommended();
+          displayWidget = Recommended(categoryId: 4,);
           break;
         case 1:
-          displayWidget = Penawaran();
+          displayWidget = Penawaran(categoryId: 5,);
           break;
         case 2:
-          displayWidget = Panduan();
+          displayWidget = Panduan(categoryId: 6,);
           break;
         case 3:
-          displayWidget = Umum();
+          displayWidget = Umum(categoryId: 7,);
           break;
         default:
-          displayWidget = Recommended();
+          displayWidget = Recommended(categoryId: 4,);
       }
       selectedIndex = opsi;
       isLoading = false;

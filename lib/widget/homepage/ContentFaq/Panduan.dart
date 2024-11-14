@@ -1,33 +1,50 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:travelease_mobile/widget/homepage/CategoryFAQ.dart';
+import 'package:http/http.dart' as http;
 import 'package:travelease_mobile/widget/homepage/ContentFaq/CustomContainer.dart';
 
 class Panduan extends StatefulWidget {
-  const Panduan({Key? key}) : super(key: key);
+  final int categoryId; // Dapatkan categoryId dari pilihan pengguna
+
+  Panduan({required this.categoryId});
 
   @override
   State<Panduan> createState() => _PanduanState();
 }
 
 class _PanduanState extends State<Panduan> {
+  List<String> faqs = [];
+  bool isLoading = true;
+
+  Future<void> fetchFaqsByCategory() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/faqs/category/${widget.categoryId}'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+       faqs = data.map((item) {
+  return item.containsKey('question') ? item['question'].toString() : '';
+}).where((question) => question.isNotEmpty).toList();
+
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchFaqsByCategory();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
-      color: Colors.white,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          CustomContainer(
-              label: "Bagaimana cara memesan tiket melalui aplikasi?",
-              category: "[Panduan]"),
-              
-          CustomContainer(
-              label: "Cara membatalkan pemesanan tiket.",
-              category: "[Panduan]"),
-          // Tambahkan pertanyaan lainnya sesuai kebutuhan
-        ],
-      ),
-    );
+          height: 350,
+          child: ListView(
+             padding: EdgeInsets.zero,
+              children: faqs.map((faq) => CustomContainer(label: faq)).toList(),
+            ),
+        );
   }
 }
