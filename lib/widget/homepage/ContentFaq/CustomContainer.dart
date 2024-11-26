@@ -11,7 +11,7 @@ class CustomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProblemPage()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailProblemPage()));
       },
       child: Container(
         

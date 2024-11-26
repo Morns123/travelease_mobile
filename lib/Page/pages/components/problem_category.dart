@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelease_mobile/service/faq_service.dart';
 
 class Category {
   final String name;
@@ -8,15 +9,13 @@ class Category {
 }
 
 class ProblemCategory extends StatefulWidget {
-  final List<Category> categories;
   final ValueChanged<String> onSelected;
-  final int defaultSelectedIndex; // Tambahkan parameter defaultSelectedIndex
+  final int defaultSelectedIndex;
 
   const ProblemCategory({
     super.key,
-    required this.categories,
     required this.onSelected,
-    this.defaultSelectedIndex = 0, // Default category pertama terpilih
+    this.defaultSelectedIndex = 0,
   });
 
   @override
@@ -24,30 +23,55 @@ class ProblemCategory extends StatefulWidget {
 }
 
 class _ProblemCategoryState extends State<ProblemCategory> {
+  late Future<List<dynamic>> _categoriesFuture;
   late int selectedButtonIndex;
+
+  // Peta warna untuk setiap kategori
+  final Map<String, Color> categoryColors = {
+    'Penawaran & Promo': Colors.green,
+    'Panduan': Colors.orange,
+    'Umum': Colors.purple,
+  };
 
   @override
   void initState() {
     super.initState();
     selectedButtonIndex = widget.defaultSelectedIndex;
-    // Panggil callback dengan category default yang dipilih
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.onSelected(widget.categories[selectedButtonIndex].name);
-    });
+    _categoriesFuture = getFaqCategoriesWithSubcategoriesAndFaqs(); // Memanggil API
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: widget.categories.asMap().entries.map((entry) {
-        int index = entry.key;
-        Category category = entry.value;
-        return buildButton(index, category);
-      }).toList(),
+    return FutureBuilder<List<dynamic>>(
+      future: _categoriesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          List<dynamic> categories = snapshot.data!;
+
+          // Filter kategori sesuai kebutuhan
+          categories = categories.where((category) {
+            return categoryColors.containsKey(category['name']);
+          }).toList();
+
+          return Row(
+            children: categories.asMap().entries.map((entry) {
+              int index = entry.key;
+              var category = entry.value;
+              return buildButton(index, category['name']); // Ambil nama kategori dari API
+            }).toList(),
+          );
+        } else {
+          return const Center(child: Text('Tidak ada kategori ditemukan.'));
+        }
+      },
     );
   }
 
-  Widget buildButton(int index, Category category) {
+  Widget buildButton(int index, String categoryName) {
     bool isSelected = selectedButtonIndex == index;
 
     return Padding(
@@ -57,23 +81,25 @@ class _ProblemCategoryState extends State<ProblemCategory> {
           setState(() {
             selectedButtonIndex = index;
           });
-          widget.onSelected(category.name); // Panggil callback saat tombol diklik
+          widget.onSelected(categoryName); // Callback untuk kategori terpilih
         },
         style: ButtonStyle(
           minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
           backgroundColor: MaterialStatePropertyAll(
-            isSelected ? Colors.white : category.color,
+            isSelected ? Colors.white : categoryColors[categoryName], // Warna berdasarkan kategori
           ),
           side: isSelected
-              ? MaterialStatePropertyAll(BorderSide(color: category.color, width: 2))
+              ? MaterialStatePropertyAll(
+                  BorderSide(color: categoryColors[categoryName]!, width: 2),
+                )
               : MaterialStatePropertyAll(BorderSide.none),
         ),
         child: Text(
-          category.name,
+          categoryName,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            color: isSelected ? category.color : Colors.white,
+            color: isSelected ? categoryColors[categoryName] : Colors.white, // Warna teks
           ),
         ),
       ),

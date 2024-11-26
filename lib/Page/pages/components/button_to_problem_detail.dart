@@ -4,14 +4,12 @@ class ButtonToProblemDetail extends StatelessWidget {
   final Size size;
   final Color color;
   final String title;
-  final VoidCallback onPressed;
   final OutlinedBorder outlinedBorder;
   const ButtonToProblemDetail({
     super.key,
     required this.size,
     required this.color,
     required this.title,
-    required this.onPressed,
     required this.outlinedBorder,
   });
 
@@ -25,9 +23,11 @@ class ButtonToProblemDetail extends StatelessWidget {
       ),
         
           child: Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: EdgeInsets.only(left: 10),
             child: Text(
               title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 11.5,
                 fontWeight: FontWeight.w500,

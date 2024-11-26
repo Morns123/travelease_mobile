@@ -208,13 +208,13 @@ class _HomePageState extends State<HomePage> {
           displayWidget = Recommended(categoryId: 4,);
           break;
         case 1:
-          displayWidget = Penawaran(categoryId: 5,);
+          displayWidget = Penawaran(categoryId: 1,);
           break;
         case 2:
-          displayWidget = Panduan(categoryId: 6,);
+          displayWidget = Panduan(categoryId: 2,);
           break;
         case 3:
-          displayWidget = Umum(categoryId: 7,);
+          displayWidget = Umum(categoryId: 3,);
           break;
         default:
           displayWidget = Recommended(categoryId: 4,);

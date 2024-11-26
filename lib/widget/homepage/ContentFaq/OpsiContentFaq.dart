@@ -42,7 +42,7 @@ Future<void> fetchFaqsByCategory() async {
             .map((item) => item.containsKey('question') ? item['question'].toString() : '')
             .where((question) => question.isNotEmpty)
             .toList();
-        isLoading = false;
+        isLoading = true;
       });
     } else {
       print("Expected a List but got something else.");

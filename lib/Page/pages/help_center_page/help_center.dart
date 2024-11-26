@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/Page/chat_bot.dart';
 import 'package:travelease_mobile/Page/pages/detail_problem_page/detail_problem.dart';
+import 'package:travelease_mobile/service/faq_service.dart';
 import '../components/chat_option.dart';
 import '../components/button_to_view.dart';
 import '../components/problem_category.dart';
@@ -15,12 +16,17 @@ class HelpCenterPage extends StatefulWidget {
 }
 
 class _HelpCenterPageState extends State<HelpCenterPage> {
-
+  late Future<List<dynamic>> _categories;
+  String selectedCategory = 'Penawaran & Promo'; // Default selected category
+  Set<String> selectedSubcategories =
+      {}; // Track the selected subcategories as a set
   bool _showButtons = false;
-  bool _showButtons2 = false;
-  String selectedCategory = 'Penawaran & Promo'; // Inisialisasi default
 
-  final String title = 'Voucher';
+  @override
+  void initState() {
+    super.initState();
+    _categories = getFaqCategoriesWithSubcategoriesAndFaqs();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +58,8 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   child: const TextField(
                     decoration: InputDecoration(
                       hintText: 'Cari',
-                      hintStyle: TextStyle(color: Color.fromARGB(255, 197, 197, 197)),
+                      hintStyle:
+                          TextStyle(color: Color.fromARGB(255, 197, 197, 197)),
                       prefixIcon: Icon(
                         Icons.search,
                         color: Color.fromARGB(255, 154, 154, 154),
@@ -71,16 +78,11 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: ProblemCategory(
-                    categories: [
-                      Category(name: 'Penawaran & Promo', color: Colors.green),
-                      Category(name: 'Panduan', color: Colors.orange),
-                      Category(name: 'Umum', color: Colors.purple),
-                    ],
                     onSelected: (String category) {
                       setState(() {
                         selectedCategory = category;
-                        _showButtons = false;
-                        _showButtons2 = false;
+                        selectedSubcategories
+                            .clear(); // Reset selected subcategories when changing category
                       });
                     },
                   ),
@@ -91,113 +93,130 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              if (selectedCategory == 'Penawaran & Promo') ...[
-                SizedBox(height: 1,),
-                ButtonToView(
-                  size: const Size(double.infinity, 47),
-                  icon: _showButtons
-                      ? Icons.keyboard_arrow_up_outlined
-                      : Icons.keyboard_arrow_down_outlined,
-                  color: const Color(0xffffffff),
-                  title: 'Promosi',
-                  onPressed: () {
-                    setState(() {
-                      _showButtons = !_showButtons;
-                    });
-                  },
-                  outlinedBorder: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(0),
-                    ),
-                    side: _showButtons
-                        ? const BorderSide(
-                            color: Color(0xff366389),
-                            width: 1,
-                            style: BorderStyle.solid,
-                          )
-                        : BorderSide.none,
-                  ),
-                ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: _showButtons
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5, // Reduced from 15 to 5
-                            horizontal: 30,
+        padding: const EdgeInsets.only(bottom: 150),
+        child: FutureBuilder<List<dynamic>>(
+          future: _categories,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
+              List<dynamic> selectedCategoryData = snapshot.data!
+                  .where((category) => category['name'] == selectedCategory)
+                  .toList();
+
+              // Get subcategories for the selected category
+              List<dynamic> subcategories = selectedCategoryData.isNotEmpty
+                  ? selectedCategoryData[0]['subcategories']
+                  : [];
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: subcategories.map<Widget>((subcategory) {
+                    List<dynamic> faqs =
+                        subcategory['faqs']; // FAQs for this subcategory
+                    bool isSelected =
+                        selectedSubcategories.contains(subcategory['name']);
+                    return Column(
+                      children: [
+                        ButtonToView(
+                          size: const Size(double.infinity, 47),
+                          icon: isSelected
+                              ? Icons.keyboard_arrow_up_outlined
+                              : Icons.keyboard_arrow_down_outlined,
+                          color: const Color(0xffffffff),
+                          title: subcategory['name'],
+                          onPressed: () {
+                            setState(() {
+                              if (isSelected) {
+                                // If already selected, remove it from the set
+                                selectedSubcategories
+                                    .remove(subcategory['name']);
+                              } else {
+                                // If not selected, add it to the set
+                                selectedSubcategories.add(subcategory['name']);
+                              }
+                            });
+                          },
+                          outlinedBorder: RoundedRectangleBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(0)),
+                            side: isSelected
+                                ? const BorderSide(
+                                    color: Color(0xff366389),
+                                    width: 1,
+                                    style: BorderStyle.solid,
+                                  )
+                                : BorderSide.none,
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 400,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffffffff),
-                            ),
-                            child: Column(
-                              children: [
-                                ButtonToProblemDetail(
-                                  size: const Size(double.infinity, 35),
-                                  color: const Color(0xffffffff),
-                                  title: '[$title] Bagaimana cara menggunakan kode voucher',
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DetailProblemPage(),
-                                      ),
-                                    );
-                                  },
-                                  outlinedBorder: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(0),
+                        ),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: isSelected
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 5,
+                                    horizontal: 30,
+                                  ),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 400,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffffffff),
                                     ),
-                                    side: BorderSide(
-                                      color: Color(0xffC1C1C1),
-                                      width: 1,
-                                      style: BorderStyle.solid,
+                                    child: Column(
+                                      children: faqs.map<Widget>((faq) {
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailProblemPage(
+                                                    subsCategory:
+                                                        subcategory['name'],
+                                                    question: faq[
+                                                        'question'], // Data pertanyaan dari API
+                                                    answer: faq[
+                                                        'answer'], // Data jawaban dari API
+                                                  ),
+                                                ));
+                                          },
+                                          child: ButtonToProblemDetail(
+                                            size:
+                                                const Size(double.infinity, 35),
+                                            color: const Color(0xffffffff),
+                                            title:
+                                                '[${subcategory['name']}] ${faq['question']}', // Displaying the question
+                                            outlinedBorder:
+                                                const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(0)),
+                                              side: BorderSide(
+                                                color: Color(0xffC1C1C1),
+                                                width: 1,
+                                                style: BorderStyle.solid,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
+                    );
+                  }).toList(),
                 ),
-                ButtonToView(
-                  size: const Size(double.infinity, 47),
-                  icon: _showButtons2
-                      ? Icons.keyboard_arrow_up_outlined
-                      : Icons.keyboard_arrow_down_outlined,
-                  color: const Color(0xffffffff),
-                  title: 'Program Berhadiah',
-                  onPressed: () {
-                    setState(() {
-                      _showButtons2 = !_showButtons2;
-                    });
-                  },
-                  outlinedBorder: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(0),
-                    ),
-                    side: _showButtons2
-                        ? const BorderSide(
-                            color: Color(0xff366389),
-                            width: 1,
-                            style: BorderStyle.solid,
-                          )
-                        : BorderSide.none,
-                  ),
-                ),
-              ],
-            ],
-          ),
+              );
+            } else {
+              return const Center(child: Text('Tidak ada data subkategori.'));
+            }
+          },
         ),
       ),
       bottomSheet: Container(
@@ -216,7 +235,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  fontFamily: "Montserrat-Bold"
+                  fontFamily: "Montserrat-Bold",
                 ),
               ),
             ),
@@ -253,4 +272,3 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
     );
   }
 }
-

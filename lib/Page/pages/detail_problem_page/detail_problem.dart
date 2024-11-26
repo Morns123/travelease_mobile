@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/Page/chat_bot.dart';
 import 'package:travelease_mobile/Page/pages/components/button_article.dart';
+import 'package:travelease_mobile/service/faq_service.dart';
 import '../components/chat_option.dart';
 
 class DetailProblemPage extends StatefulWidget {
-  const DetailProblemPage({super.key});
+  final String subsCategory;
+  final String question;
+  final String answer;
+
+  const DetailProblemPage({
+    super.key,
+    required this.subsCategory,
+    required this.question,
+    required this.answer,
+  });
 
   @override
   State<DetailProblemPage> createState() => _DetailProblemPageState();
@@ -13,8 +23,48 @@ class DetailProblemPage extends StatefulWidget {
 
 class _DetailProblemPageState extends State<DetailProblemPage> {
   final String frontArrow = '>';
-  final String title = 'Voucher';
+  // final String title = 'Voucher';
   bool _isExpanded = false;
+  late Future<List<dynamic>> faqData;
+
+  @override
+  void initState() {
+    super.initState();
+    faqData = getFaqCategoriesWithSubcategoriesAndFaqs();
+  }
+
+  List<dynamic> filterFaqsBySubcategory(
+      List<dynamic> categories, String subsCategory) {
+    for (var category in categories) {
+      if (category['subcategories'] != null) {
+        for (var subcategory in category['subcategories']) {
+          if (subcategory['name'] == subsCategory) {
+            var faqs = subcategory['faqs']; // Ambil FAQ berdasarkan subkategori
+            faqs.shuffle(); // Acak urutan FAQ
+            return faqs
+                .take(3)
+                .toList(); // Ambil 3 data pertama yang sudah diacak
+          }
+        }
+      }
+    }
+    return [];
+  }
+
+  String buildBreadcrumb(List<dynamic> categories) {
+    String breadcrumb = '';
+    for (var category in categories) {
+      for (var subcategory in category['subcategories']) {
+        if (subcategory['name'] == widget.subsCategory) {
+          breadcrumb +=
+              '${category['name']}  >  ${subcategory['name']}  >  ${widget.question}';
+        }
+      }
+    }
+    print('Breadcrumb: $breadcrumb'); // Debugging
+    return breadcrumb.isNotEmpty ? breadcrumb : 'Breadcrumb not found';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,67 +94,56 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'TravelEase $frontArrow',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Penawaran & Promo $frontArrow',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Promosi $frontArrow',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          '[Voucher] $frontArrow',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              decoration: const BoxDecoration(
+                color: Colors.white,
               ),
-            ),
-          ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: [
+                    FutureBuilder<List<dynamic>>(
+                      future: faqData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('No FAQs available'));
+                        } else {
+                          // Membangun breadcrumb menggunakan data kategori dan subkategori
+                          String breadcrumb = buildBreadcrumb(snapshot.data!);
+                          return Row(
+                            children: breadcrumb.split('  >  ').map((crumb) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 10
+                                ), // Tambahkan jarak antar elemen
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    crumb,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromARGB(255, 141, 50, 50),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              )),
         ),
       ),
       body: Visibility(
@@ -120,29 +159,30 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const ListTile(
+                  child: ListTile(
                     title: Text(
-                      '[Voucher] Bagaimana cara menggunakan kode voucher?',
-                      style: TextStyle(
+                      '[${widget.subsCategory}] ${widget.question}',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Color(0xff000000),
                       ),
                     ),
-                    subtitle: Text(
-                      'Jika Anda memiliki kode Voucher selain yang didapatkan dari Shopee, Anda dapat memasukkan kode Voucher tersebut dengan masuk ke halaman Saya > pilih Voucher Saya > pilih Masukkan Kode Voucher > masukkan kode Voucher yang Anda miliki > pilih Simpan.\n\nVoucher yang berhasil tersimpan di halaman Voucher Saya dapat Anda gunakan saat melakukan pembayaran, sesuai Syarat dan Ketentuan yang berlaku.\n\nJika memasukkan kode Voucher yang tidak valid, maka sistem akan menampilkan pesan bahwa Voucher tidak tersedia.\n\n⚠Catatan: Jika Voucher tidak dapat dipilih, artinya barang pada keranjang Anda belum memenuhi Syarat & Ketentuan. Voucher yang diberikan oleh Shopee, didapatkan dari Daily Prize, dan/atau dibeli dari halaman Reward Koin Shopee akan otomatis masuk ke dalam Voucher Saya. Setiap Voucher yang telah disimpan memiliki Syarat & Ketentuan berbeda yang harus diikuti.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xff000000),
+                    subtitle: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        widget.answer,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xff000000),
+                        ),
                       ),
-                      maxLines: 17,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
                 Container(
                   width: double.infinity,
@@ -157,82 +197,99 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                         child: Text(
                           'Artikel Terkait',
                           style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff000000),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: Color.fromARGB(255, 47, 61, 102),
                           ),
                         ),
                       ),
                       const SizedBox(
                         height: 2,
                       ),
-                      ButtonArticle(
-                        onTap: () {
-                          setState(() {
-                            _isExpanded = !_isExpanded;
-                          });
-                        },
-                        title:
-                            '[$title] Bagaimana cara menggunakan voucher saat checkout',
-                        border: _isExpanded
-                            ? const Border(
-                                top: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              )
-                            : const Border(
-                                top: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                      ),
-                      ButtonArticle(
-                        onTap: () {
-                          setState(() {
-                            _isExpanded = !_isExpanded;
-                          });
-                        },
-                        title:
-                            '[$title] Dimana saya dapat menemukan voucher?',
-                        border: _isExpanded
-                            ? const Border(
-                                top: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff366389),
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              )
-                            : const Border(
-                                top: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color(0xff969595),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            FutureBuilder<List<dynamic>>(
+                              future: faqData,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text('No FAQs available'));
+                                } else {
+                                  List<dynamic> faqs = filterFaqsBySubcategory(
+                                      snapshot.data!, widget.subsCategory);
+                                  return SingleChildScrollView(
+                                    child: Container(
+                                      height: 200,
+                                      child: ListView.builder(
+                                        itemCount: faqs.length,
+                                        itemBuilder: (context, index) {
+                                          var faq = faqs[index];
+                                          return ButtonArticle(
+                                            onTap: () {
+                                              String subsCategory = widget
+                                                  .subsCategory; // Atau ambil dari data faq jika perlu
+                                              String question = faq['question'];
+                                              String answer = faq['answer'];
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetailProblemPage(
+                                                              subsCategory:
+                                                                  subsCategory,
+                                                              question:
+                                                                  question,
+                                                              answer: answer)));
+                                              setState(() {
+                                                _isExpanded = !_isExpanded;
+                                              });
+                                            },
+                                            title:
+                                                '[${widget.subsCategory}] ${faq['question']}',
+                                            border: _isExpanded
+                                                ? const Border(
+                                                    top: BorderSide(
+                                                      color: Color(0xff366389),
+                                                      width: 2,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Color(0xff366389),
+                                                      width: 2,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                  )
+                                                : const Border(
+                                                    top: BorderSide(
+                                                      color: Color(0xff969595),
+                                                      width: 1,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Color(0xff969595),
+                                                      width: 1,
+                                                      style: BorderStyle.solid,
+                                                    ),
+                                                  ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -263,9 +320,13 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
             ),
             ChatOption(
               onTap: () {
-                                // ignore: avoid_types_as_parameter_names
-                                Navigator.push(context, MaterialPageRoute(builder: (context) =>  ReportPage(onCategorySelected: (int ) {  },)));
-
+                // ignore: avoid_types_as_parameter_names
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportPage(
+                              onCategorySelected: (int) {},
+                            )));
               },
               text: 'Pertanyaan Saya',
               color: const Color(0xffC73437),
@@ -273,8 +334,8 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
             ),
             ChatOption(
               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
-
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatBot()));
               },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),
