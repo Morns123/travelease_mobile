@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/pages/help_center_page/help_center.dart';
 import 'package:travelease_mobile/Page/pages/profile_page/profile.dart';
+import 'package:travelease_mobile/Page/profile.dart';
 
-class HomeApp extends StatelessWidget {
-  const HomeApp({super.key});
+class HomeApp extends StatefulWidget {
+   final String token;
+
+  const HomeApp({required this.token});
+
+  @override
+  State<HomeApp> createState() => _HomeAppState();
+}
+
+class _HomeAppState extends State<HomeApp> {
+  late String _token;
+
+  @override
+  void initState() {
+    super.initState();
+    _token = widget.token;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +64,7 @@ class HomeApp extends StatelessWidget {
                             SizedBox(width: 180,),
                             InkWell(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(token: _token,)));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 30),

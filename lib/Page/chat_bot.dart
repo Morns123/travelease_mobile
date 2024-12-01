@@ -1,17 +1,15 @@
 import 'dart:math';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 class ChatMessage {
   String messageContent;
   String messageType;
-  bool isOptionList;
   bool isCategoryList; 
 
   ChatMessage({
     required this.messageContent,
     required this.messageType,
-    this.isOptionList = false,
     this.isCategoryList = false, 
   });
 }
@@ -22,38 +20,70 @@ class ChatBot extends StatefulWidget {
 }
 
 class _ChatBotState extends State<ChatBot> {
-  List<ChatMessage> messages = [
-    ChatMessage(
-      messageContent:
-          "Saya di sini untuk membantu Anda dengan segala kebutuhan perjalanan Anda. Jika Anda memiliki pertanyaan atau memerlukan bantuan, silakan beri tahu saya!",
-      messageType: "receiver",
-    ),
-    ChatMessage(
-      messageContent: "Berikut adalah pertanyaan terkait Refund:",
-      messageType: "receiver",
-      isOptionList: true,
-    ),
-    ChatMessage(
-      messageContent: "Pilih kategori yang tersedia:",
-      messageType: "receiver",
-      isCategoryList: true,
-    ),
-  ];
+   List<Map<String, dynamic>> _messages = [];
+  String _currentQuestion = "Saya di sini untuk membantu Anda dengan segala kebutuhan perjalanan Anda. Jika Anda memiliki pertanyaan atau memerlukan bantuan, silakan beri tahu saya!";
+  TextEditingController _textController = TextEditingController();
 
 
-  final List<String> categories = [
-    "Pemesanan",
-    "Pembayaran",
-    "Refund",
-    "Destinasi",
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _getInitialNodes();
+  }
 
-  final List<Color> categoryColors = [
-  Colors.blue,
-  Colors.green,
-  Colors.red, 
-  Colors.orange, 
-  ];
+  Future<void> _getInitialNodes() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/conversation/initial'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        _currentQuestion = data['data']['question'];
+        _messages.add({
+          'type': 'bot',
+          'message': _currentQuestion,
+          'options': data['data']['nodes']
+        });
+      });
+    } else {
+      setState(() {
+        _messages.add({'type': 'bot', 'message': 'Error fetching data from server.'});
+      });
+    }
+  }
+
+  Future<void> _getChildNodes(int parentId, String buttonText) async {
+    setState(() {
+      _messages.add({'type': 'user', 'message': buttonText});
+    });
+
+    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/conversation/children/$parentId'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        if (data['data']['nodes'] != null && data['data']['nodes'].isNotEmpty) {
+          _currentQuestion = data['data']['question'];
+          _messages.add({
+            'type': 'bot',
+            'message': data['data']['question'],
+            'options': data['data']['nodes'],
+          });
+        } else {
+          _messages.add({'type': 'bot', 'message': data['data']['answer']});
+          Future.delayed(Duration(seconds: 0), () {
+            _getInitialNodes();
+          });
+        }
+      });
+    } else {
+      setState(() {
+        _messages.add({'type': 'bot', 'message': 'Error fetching child nodes.'});
+      });
+    }
+  }
+
+
+
+
 
   TextEditingController _controller = TextEditingController();
 
@@ -65,36 +95,44 @@ class _ChatBotState extends State<ChatBot> {
 
   // sama bae kek di detailchat
   void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+    String userMessage = _textController.text.trim();
+    if (userMessage.isNotEmpty) {
       setState(() {
-        messages.add(ChatMessage(
-          messageContent: _controller.text,
-          messageType: "sender",
-        ));
-        _controller.clear();
+        _messages.add({'type': 'user', 'message': userMessage});
+        _messages.add({
+          'type': 'bot',
+          'message': 'Mohon maaf saya tidak mengerti maksud Anda, silakan pilih dari opsi yang sudah disediakan.'
+        });
+        // Mengulangi pertanyaan terakhir yang dibahas
+        _messages.add({
+          'type': 'bot',
+          'message': _currentQuestion,
+          'options': _messages.lastWhere((msg) => msg['type'] == 'bot' && msg['options'] != null)['options']
+        });
       });
+      _textController.clear();
     }
   }
 
   // metod untuk simulasi in saat ngeklik opsion nya
-  void _selectOption(String selectedOption) {
-    setState(() {
-      messages.add(ChatMessage(messageContent: selectedOption, messageType: "sender"));
-      messages.add(ChatMessage(
-        messageContent:
-        // ini balesannya (cuma contoh)
-            "Proses pengembalian uang tiket biasanya memerlukan waktu 5 hingga 14 hari kerja, tergantung pada metode pembayaran yang Anda gunakan.",
-        messageType: "receiver",
-      ));
-    });
-  }
+  // void _selectOption(String selectedOption) {
+  //   setState(() {
+  //     messages.add(ChatMessage(messageContent: selectedOption, messageType: "sender"));
+  //     messages.add(ChatMessage(
+  //       messageContent:
+  //       // ini balesannya (cuma contoh)
+  //           "Proses pengembalian uang tiket biasanya memerlukan waktu 5 hingga 14 hari kerja, tergantung pada metode pembayaran yang Anda gunakan.",
+  //       messageType: "receiver",
+  //     ));
+  //   });
+  // }
 
   // umpan balik category
-  void _onCategoryClick(String categoryName) {
-    setState(() {
-      messages.add(ChatMessage(messageContent: categoryName, messageType: "sender"));
-    });
-  }
+  // void _onCategoryClick(String categoryName) {
+  //   setState(() {
+  //     messages.add(ChatMessage(messageContent: categoryName, messageType: "sender"));
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -134,15 +172,14 @@ class _ChatBotState extends State<ChatBot> {
       body: Stack(
         children: <Widget>[
           ListView.builder(
-            itemCount: messages.length,
+            itemCount: _messages.length,
             padding: EdgeInsets.only(top: 10, bottom: 60),
             itemBuilder: (context, index) {
-              if (messages[index].isOptionList) {
-                return _buildCategoryList(); // render list category 
-              } else if (messages[index].isCategoryList) {
-                return _buildOptionList(); // render list option
+              final messages = _messages[index];
+             if (messages['options'] != null) {
+                return _buildOptionList(messages); // render list option
               } else {
-                return _buildMessageBubble(messages[index]);
+                return _buildMessageBubble(messages);
               }
             },
           ),
@@ -182,7 +219,7 @@ class _ChatBotState extends State<ChatBot> {
                   SizedBox(width: 15),
                   Expanded(
                     child: TextField(
-                      controller: _controller,
+                      controller: _textController,
                       decoration: InputDecoration(
                           hintText: "Tulis pesan di sini...",
                           hintStyle: TextStyle(color: Colors.white),
@@ -211,20 +248,23 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   // Widget sama be
-  Widget _buildMessageBubble(ChatMessage message) {
+  Widget _buildMessageBubble(Map<String, dynamic> message) {
     return Container(
       padding: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
       child: Align(
-        alignment: (message.messageType == "receiver" ? Alignment.topLeft : Alignment.topRight),
+        alignment: message['type'] == 'bot' ? Alignment.topLeft : Alignment.topRight,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: (message.messageType == "receiver" ? Colors.grey.shade200 : Colors.blue[200]),
+            color: message['type'] == 'bot' ? Colors.grey.shade200 : const Color.fromARGB(255, 112, 177, 242),
           ),
           padding: EdgeInsets.all(16),
           child: Text(
-            message.messageContent,
-            style: TextStyle(fontSize: 15),
+            message['message'],
+            style: TextStyle(
+              fontSize: 15,
+              color: message['type'] == 'bot' ? Colors.black : const Color.fromARGB(255, 255, 255, 255),
+              ),
           ),
         ),
       ),
@@ -232,7 +272,8 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   // widget tampilan list option
-  Widget _buildOptionList() {
+  Widget _buildOptionList(Map<String, dynamic> message) {
+    final options = message['options'] as List<dynamic>;
     return Container(
       padding: EdgeInsets.all(16.0),
       margin: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
@@ -244,7 +285,7 @@ class _ChatBotState extends State<ChatBot> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Silahkan pilih topik sesuai yang ingin kamu tanyakan",
+             message['message'],
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -252,21 +293,19 @@ class _ChatBotState extends State<ChatBot> {
           ),
           SizedBox(height: 10),
           Divider(),
-          _buildOption(context, "Apa metode pembayaran yang diterima untuk pemesanan tiket?", _selectOption),
-          Divider(),
-          _buildOption(context, "Bagaimana cara mengubah pemesanan tiket yang sudah saya buat?", _selectOption),
-          Divider(),
-          _buildOption(context, "Apa yang harus saya lakukan jika saya tidak menerima konfirmasi refund setelah mengajukan permohonan?", _selectOption),
+          ...options.map((options) {
+            return _buildOption(context, options['button_text'], options['id']);
+          })
         ],
       ),
     );
   }
 
   // metod nya
-  Widget _buildOption(BuildContext context, String text, Function(String) onClick) {
+  Widget _buildOption(BuildContext context, String text,  int nodeId) {
     return InkWell(
       onTap: () {
-        onClick(text);
+          _getChildNodes(nodeId, text);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -286,24 +325,7 @@ class _ChatBotState extends State<ChatBot> {
     );
   }
 
-  // widget tampilan list kategori
-  Widget _buildCategoryList() {
-  return Container(
-   height: 40,
-   margin: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-   child: ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: categories.length,
-    itemBuilder: (context, index) {
-     return CategoryItem(
-      categoryName: categories[index],
-      onClick: _onCategoryClick,
-      backgroundColor: categoryColors[index], 
-     );
-    },
-   ),
-  );
- }
+
 }
 
 class CategoryItem extends StatelessWidget {

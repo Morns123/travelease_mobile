@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/pages/components/field.dart';
+import 'package:travelease_mobile/service/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final String token;
+  const ProfilePage({required this.token});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -10,13 +12,56 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool isEditing = false;
-  TextEditingController nameController =
-      TextEditingController(text: 'Zulkifli Hartanto');
-  TextEditingController emailController =
-      TextEditingController(text: 'Zul22@gmail.com');
-  TextEditingController phoneController =
-      TextEditingController(text: '0895-8030-92001');
+ final ApiService apiService = ApiService();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  bool _isLoading = true;
 
+   void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  void _fetchUserProfile() async {
+    try {
+      final response = await apiService.getProfile(widget.token);
+      if (response['success']) {
+        setState(() {
+          _nameController.text = response['data']['user']['name'];
+          _emailController.text = response['data']['user']['email'];
+          _isLoading = false;
+        });
+      } else {
+        _showError(response['message']);
+      }
+    } catch (e) {
+      _showError('Failed to load profile');
+    }
+  }
+
+void _updateProfile() async {
+  final response = await apiService.updateProfile(
+    widget.token,
+    _nameController.text,
+    _emailController.text,
+  );
+
+  print('Response: $response'); // Tambahkan log di sini
+  if (response['success']) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Profile updated successfully')),
+    );
+  } else {
+    _showError(response['message']);
+  }
+}
+
+
+    void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $message')),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,16 +87,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       bottomRight: Radius.circular(300),
                     ),
                   ),
-                  child: const Align(
+                  child: Align(
                     alignment: Alignment.topCenter,
-                    child: Text(
-                      'Zulkifli Hartanto',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: 
+                     _isLoading
+                        ? CircularProgressIndicator() 
+                        : Text(
+                            _nameController.text,
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(
@@ -60,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   width: 320,
                   child: MyTextField(
-                    textEditingController: nameController,
+                    textEditingController: _nameController,
                     prefixIcon: Icons.person_outlined,
                     enabled: isEditing,
                   ),
@@ -71,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   width: 320,
                   child: MyTextField(
-                    textEditingController: emailController,
+                    textEditingController: _emailController,
                     prefixIcon: Icons.email_outlined,
                     enabled: isEditing,
                   ),
@@ -79,14 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 20,
                 ),
-                SizedBox(
-                  width: 320,
-                  child: MyTextField(
-                    textEditingController: phoneController,
-                    prefixIcon: Icons.phone_android_outlined,
-                    enabled: isEditing,
-                  ),
-                ),
+                
                 const SizedBox(
                   height: 60,
                 ),
@@ -107,18 +148,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   onPressed: () {
-                    setState(() {
-                      isEditing = !isEditing;
-                    });
-                  },
-                  child: Text(
-                    isEditing ? 'Save Profile' : 'Edit Profile',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xffffffff),
-                    ),
-                  ),
+    if (isEditing) {
+      _updateProfile(); // Kirim perubahan ke API jika dalam mode edit
+    }
+    setState(() {
+      isEditing = !isEditing; // Ubah mode edit setelah penyimpanan
+    });
+  },
+  child: Text(
+    isEditing ? 'Save Profile' : 'Edit Profile',
+    style: const TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: Color(0xffffffff),
+    ),
+  ),
                 )
               ],
             ),
