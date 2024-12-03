@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Chatbot_service {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/conversation';
+  static const String baseUrl = 'http://192.168.39.147/api/conversation';
 
   // Fungsi untuk mengambil initial nodes (node percakapan pertama)
   Future<List<dynamic>> fetchInitialNodes() async {

@@ -76,32 +76,38 @@ class _ProblemCategoryState extends State<CategoryFaq> {
   Widget buildButton(int index, String categoryName) {
     bool isSelected = selectedButtonIndex == index;
 
-    return Padding(
-      padding: const EdgeInsets.only(right: 0,left: 6),
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            selectedButtonIndex = index;
-          });
-          widget.onSelected(categoryName); // Callback untuk kategori terpilih
-        },
-        style: ButtonStyle(
-          minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
-          backgroundColor: MaterialStatePropertyAll(
-            isSelected ? Colors.white : categoryColors[categoryName], // Warna berdasarkan kategori
-          ),
-          side: isSelected
-              ? MaterialStatePropertyAll(
-                  BorderSide(color: categoryColors[categoryName]!, width: 2),
-                )
-              : MaterialStatePropertyAll(BorderSide.none),
-        ),
-        child: Text(
-          categoryName,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? categoryColors[categoryName] : Colors.white, // Warna teks
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 0,left: 6),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedButtonIndex = index;
+              });
+              widget.onSelected(categoryName); // Callback untuk kategori terpilih
+            },
+            style: ButtonStyle(
+              minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
+              backgroundColor: MaterialStatePropertyAll(
+                isSelected ? Colors.white : categoryColors[categoryName], // Warna berdasarkan kategori
+              ),
+              side: isSelected
+                  ? MaterialStatePropertyAll(
+                      BorderSide(color: categoryColors[categoryName]!, width: 2),
+                    )
+                  : MaterialStatePropertyAll(BorderSide.none),
+            ),
+            child: Text(
+              categoryName,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? categoryColors[categoryName] : Colors.white, // Warna teks
+              ),
+            ),
           ),
         ),
       ),

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/widget/DetailReport/LaporanCard.dart';
 
-class DetailReport extends StatelessWidget {
-  const DetailReport({super.key});
+class DetailReport extends StatefulWidget {
+  final Map<String, dynamic> tiket;
+  
+  const DetailReport({super.key, required this.tiket});
+
+  @override
+  State<DetailReport> createState() => _DetailReportState();
+}
+
+class _DetailReportState extends State<DetailReport> {
+
 
   @override
   Widget build(BuildContext context) {
+    final tiket = widget.tiket;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 231, 231, 231),
       body: Column(
@@ -36,11 +46,11 @@ class DetailReport extends StatelessWidget {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 20),
-                      child: Text("Pembatalan Pesanan", style: TextStyle(fontSize: 13,fontFamily: "Montserrat-Bold"),
+                      child: Text(tiket['title'], style: TextStyle(fontSize: 16,fontFamily: "Montserrat-Bold"),
                       )),
                       Container(
                         margin: EdgeInsets.only(right: 20),
-                        child: Text("Sedang Berlangsung", style: TextStyle(fontSize: 11,color: Color.fromRGBO(90, 235, 76, 1)),),
+                        child: Text(tiket['priority'], style: TextStyle(fontSize: 15,color: Color.fromRGBO(90, 235, 76, 1)),),
                       )
                   ],
                 ),
@@ -50,7 +60,7 @@ class DetailReport extends StatelessWidget {
                       margin: EdgeInsets.only(left: 20,top: 5),
                       child: Row(
                         children: [
-                          Text("Kode Laporan: A55032", style: TextStyle(color: const Color.fromARGB(255, 116, 115, 114), fontSize: 11),),
+                          Text("Kode Laporan: ${tiket['id']}", style: TextStyle(color: const Color.fromARGB(255, 116, 115, 114), fontSize: 11),),
                           IconButton(onPressed: () {}, icon: Icon(Icons.content_copy,size: 15,)),
                         ],
                       ),
@@ -69,7 +79,7 @@ class DetailReport extends StatelessWidget {
                     color: const Color.fromARGB(255, 201, 68, 58),
                     borderRadius: BorderRadius.circular(20),
                     ),
-                     child:  LaporanWidget(),
+                     child:  LaporanWidget(currentStatus: tiket['status'],),
                    ) 
         ],
       ),

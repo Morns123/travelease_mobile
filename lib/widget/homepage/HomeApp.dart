@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/pages/help_center_page/help_center.dart';
 import 'package:travelease_mobile/Page/pages/profile_page/profile.dart';
-import 'package:travelease_mobile/Page/profile.dart';
 
 class HomeApp extends StatefulWidget {
    final String token;

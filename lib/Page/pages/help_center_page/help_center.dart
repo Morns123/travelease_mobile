@@ -9,13 +9,18 @@ import '../components/problem_category.dart';
 import '../components/button_to_problem_detail.dart';
 
 class HelpCenterPage extends StatefulWidget {
-  const HelpCenterPage({super.key});
+  final String token;
+
+  const HelpCenterPage({super.key, required this.token});
 
   @override
   State<HelpCenterPage> createState() => _HelpCenterPageState();
 }
 
 class _HelpCenterPageState extends State<HelpCenterPage> {
+    late String _token;
+
+
   late Future<List<dynamic>> _categories;
   String selectedCategory = 'Penawaran & Promo'; // Default selected category
   Set<String> selectedSubcategories =
@@ -26,6 +31,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
   void initState() {
     super.initState();
     _categories = getFaqCategoriesWithSubcategoriesAndFaqs();
+    _token = widget.token;
   }
 
   @override
@@ -181,6 +187,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                                                         'question'], // Data pertanyaan dari API
                                                     answer: faq[
                                                         'answer'], // Data jawaban dari API
+                                                    token: _token,    
                                                   ),
                                                 ));
                                           },
@@ -245,7 +252,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ReportPage(
-                      onCategorySelected: (int) {},
+                      onCategorySelected: (int) {}, token: _token,
                     ),
                   ),
                 );

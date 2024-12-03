@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:travelease_mobile/Page/chat_detail.dart';
 
-class LaporanWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> laporanData = [
+class LaporanWidget extends StatefulWidget {
+  final String currentStatus;
+
+  const LaporanWidget({super.key, required this.currentStatus });
+
+  @override
+  State<LaporanWidget> createState() => _LaporanWidgetState();
+}
+
+class _LaporanWidgetState extends State<LaporanWidget> {
+  
+  late final List<Map<String, dynamic>> laporanData;
+
+  @override
+  Widget build(BuildContext context) {
+    laporanData = [
     {
       'status': 'Laporan Ditutup',
-      'description': 'Laporan Telah Selesai',
-      'date': 'null',
-      'isActive': false,
-    },
-    {
-      'status': 'Laporan Selesai Ditangani',
       'description': 'Laporanmu ditandai “Selesai” oleh Customer Service',
-      'date': '05 September 2024 10:21',
-      'isActive': true,
+      'date': 'null',
+      'isActive': widget.currentStatus == 'closed' || widget.currentStatus == 'canceled',
     },
     {
       'status': 'Laporan Diterima',
       'description': 'Laporan kamu telat diterima dan akan kami respon sesegera mungkin.',
       'date': '05 September 2024 10:21',
-      'isActive': false,
+      'isActive': widget.currentStatus == 'accepted',
+    },
+    {
+      'status': 'Laporan Dalam Antrean',
+      'description': 'Laporan Kamu Sedang Dalam Antrean',
+      'date': '05 September 2024 10:21',
+      'isActive': widget.currentStatus == 'pending',
     },
   ];
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         color: Colors.white,

@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// Fungsi untuk mengambil kategori FAQ beserta subkategori dan FAQ terkait
-Future<List<dynamic>> getFaqCategoriesWithSubcategoriesAndFaqs() async {
+class Ticket_service {
+  
+  Future<List<dynamic>> getTicket() async {
   
   final response = await http.get(
     
-    Uri.parse('http://192.168.39.147:8000/api/faqs/categories-with-faqs'),  // Ganti dengan URL API Anda
+    Uri.parse('http://10.0.2.2:8000/api/ticket'),  // Ganti dengan URL API Anda
   );
 
   if (response.statusCode == 200) {
@@ -19,4 +20,4 @@ Future<List<dynamic>> getFaqCategoriesWithSubcategoriesAndFaqs() async {
   }
 }
 
-
+}

@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int) { })));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int) { }, token: _token,)));
                   },
                   child: Container(
                     child: Row(
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCenterPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HelpCenterPage(token: _token,)));
                   },
                   child: Container(
                     child: Row(
@@ -171,7 +171,8 @@ class _HomePageState extends State<HomePage> {
                         builder: (context) => DetailProblemPage(
                           subsCategory: subcategory['name'],
                           question: faq['question'],
-                          answer: faq['answer']
+                          answer: faq['answer'],
+                          token: _token,
                         ),
                       ),
                     );

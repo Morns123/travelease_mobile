@@ -32,7 +32,7 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   Future<void> _getInitialNodes() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/conversation/initial'));
+    final response = await http.get(Uri.parse('http://192.168.39.147:8000/api/conversation/initial'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -55,7 +55,7 @@ class _ChatBotState extends State<ChatBot> {
       _messages.add({'type': 'user', 'message': buttonText});
     });
 
-    final response = await http.get(Uri.parse('http://10.0.2.2:8000/api/conversation/children/$parentId'));
+    final response = await http.get(Uri.parse('http://192.168.39.147:8000/api/conversation/children/$parentId'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

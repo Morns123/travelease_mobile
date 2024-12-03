@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/HomePage.dart';
+import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/Page/profile.dart';
 import 'package:travelease_mobile/service/api_service.dart';
 
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => 
         // ProfileScreen(token: response['data']['token'])
-        HomePage(token: response['data']['token'],)
+        HomePage(token: response['data']['token'], )
         ),
       );
     } else {

@@ -9,12 +9,14 @@ class DetailProblemPage extends StatefulWidget {
   final String subsCategory;
   final String question;
   final String answer;
+  final String token;
 
   const DetailProblemPage({
     super.key,
     required this.subsCategory,
     required this.question,
     required this.answer,
+    required this.token,
   });
 
   @override
@@ -22,6 +24,9 @@ class DetailProblemPage extends StatefulWidget {
 }
 
 class _DetailProblemPageState extends State<DetailProblemPage> {
+      late String _token;
+
+
   final String frontArrow = '>';
   // final String title = 'Voucher';
   bool _isExpanded = false;
@@ -31,6 +36,8 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
   void initState() {
     super.initState();
     faqData = getFaqCategoriesWithSubcategoriesAndFaqs();
+    _token = widget.token;
+
   }
 
   List<dynamic> filterFaqsBySubcategory(
@@ -248,7 +255,8 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                                                                   subsCategory,
                                                               question:
                                                                   question,
-                                                              answer: answer)));
+                                                              answer: answer,
+                                                              token: _token,)));
                                               setState(() {
                                                 _isExpanded = !_isExpanded;
                                               });
@@ -325,7 +333,7 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ReportPage(
-                              onCategorySelected: (int) {},
+                              onCategorySelected: (int) {}, token: _token,
                             )));
               },
               text: 'Pertanyaan Saya',

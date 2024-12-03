@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class OpsiReport extends StatefulWidget {
   final Function(int) onCategorySelected;
+  final String token;
 
-  OpsiReport({required this.onCategorySelected});
+  OpsiReport({required this.onCategorySelected, required this.token});
 
   @override
   State<OpsiReport> createState() => _MyWidgetState();
