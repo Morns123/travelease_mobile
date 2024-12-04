@@ -6,7 +6,7 @@ Future<List<dynamic>> getFaqCategoriesWithSubcategoriesAndFaqs() async {
   
   final response = await http.get(
     
-    Uri.parse('http://192.168.39.147:8000/api/faqs/categories-with-faqs'),  // Ganti dengan URL API Anda
+    Uri.parse('http://192.168.1.145:8000/api/faqs/categories-with-faqs'),  // Ganti dengan URL API Anda
   );
 
   if (response.statusCode == 200) {

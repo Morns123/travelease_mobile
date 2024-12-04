@@ -333,7 +333,7 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ReportPage(
-                              onCategorySelected: (int) {}, token: _token,
+                              onCategorySelected: (int) {}, token: _token, 
                             )));
               },
               text: 'Pertanyaan Saya',
@@ -343,7 +343,7 @@ class _DetailProblemPageState extends State<DetailProblemPage> {
             ChatOption(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatBot()));
+                    MaterialPageRoute(builder: (context) => ChatBot(token: _token,)));
               },
               text: 'Chat Dengan TravelMate',
               color: const Color(0xff6799C3),

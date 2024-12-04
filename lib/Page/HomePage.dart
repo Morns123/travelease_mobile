@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int) { }, token: _token,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int) { }, token: _token, )));
                   },
                   child: Container(
                     child: Row(
@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatBot(token: _token,)));
               },
               child: Row(
                 children: [

@@ -252,7 +252,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ReportPage(
-                      onCategorySelected: (int) {}, token: _token,
+                      onCategorySelected: (int) {}, token: _token, 
                     ),
                   ),
                 );
@@ -265,7 +265,7 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ChatBot()),
+                  MaterialPageRoute(builder: (context) => ChatBot(token: _token,)),
                 );
               },
               text: 'Chat Dengan TravelMate',

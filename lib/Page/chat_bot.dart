@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class ChatMessage {
   String messageContent;
   String messageType;
@@ -13,26 +14,87 @@ class ChatMessage {
     this.isCategoryList = false, 
   });
 }
+class Category {
+  final int id;
+  final String name;
+  final String description;
+
+  Category({
+    required this.id,
+    required this.name,
+    required this.description,
+  });
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['id'],
+      name: json['name_category'],
+      description: json['description'],
+    );
+  }
+}
+
 
 class ChatBot extends StatefulWidget {
+  final String token;
+
+    const ChatBot({Key? key,  required this.token}) : super(key: key);
+
+
+
   @override
   _ChatBotState createState() => _ChatBotState();
 }
 
 class _ChatBotState extends State<ChatBot> {
    List<Map<String, dynamic>> _messages = [];
+     List<Category> categories = [];
+     
+     late String token;
   String _currentQuestion = "Saya di sini untuk membantu Anda dengan segala kebutuhan perjalanan Anda. Jika Anda memiliki pertanyaan atau memerlukan bantuan, silakan beri tahu saya!";
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+   final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  String selectedPriority = 'low';
+  int? selectedCategoryId;
 
 
   @override
   void initState() {
     super.initState();
     _getInitialNodes();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      final token = widget.token;
+
+      final response = await http.get(
+        Uri.parse('http://192.168.1.145:8000/api/categories'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == true) {
+          setState(() {
+            categories = (data['data'] as List)
+                .map((category) => Category.fromJson(category))
+                .toList();
+          });
+        }
+      }
+    } catch (e) {
+      print('Error loading categories: $e');
+    }
   }
 
   Future<void> _getInitialNodes() async {
-    final response = await http.get(Uri.parse('http://192.168.39.147:8000/api/conversation/initial'));
+    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/initial'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -55,7 +117,7 @@ class _ChatBotState extends State<ChatBot> {
       _messages.add({'type': 'user', 'message': buttonText});
     });
 
-    final response = await http.get(Uri.parse('http://192.168.39.147:8000/api/conversation/children/$parentId'));
+    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/children/$parentId'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -194,7 +256,7 @@ class _ChatBotState extends State<ChatBot> {
                 ),
                 child: FloatingActionButton(
                   heroTag: "chatCsButton",
-                  onPressed: () {},
+                  onPressed: _showCreateTicketDialog,
                   child: Text(
                     "Chat CS",
                     style: TextStyle(
@@ -323,6 +385,152 @@ class _ChatBotState extends State<ChatBot> {
         ),
       ),
     );
+  }
+
+    void _showCreateTicketDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Buat Tiket Baru'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: titleController,
+                      decoration: InputDecoration(
+                        labelText: 'Judul',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: descriptionController,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        labelText: 'Deskripsi',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: selectedPriority,
+                      decoration: InputDecoration(
+                        labelText: 'Prioritas',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: ['low', 'medium', 'high'].map((String priority) {
+                        return DropdownMenuItem<String>(
+                          value: priority,
+                          child: Text(priority.toUpperCase()),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedPriority = value ?? 'low';
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      value: selectedCategoryId,
+                      decoration: InputDecoration(
+                        labelText: 'Kategori',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: categories.map((Category category) {
+                        return DropdownMenuItem<int>(
+                          value: category.id,
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                      onChanged: (int? value) {
+                        setState(() {
+                          selectedCategoryId = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Batal'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF3C729A),
+                  ),
+                  onPressed: () => _createTicket(context),
+                  child: Text(
+                    'Buat Tiket',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+
+
+    Future<void> _createTicket(BuildContext context) async {
+    if (titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        selectedCategoryId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Semua field harus diisi')),
+      );
+      return;
+    }
+
+    try {
+      final token = widget.token;
+
+      final response = await http.post(
+        Uri.parse('http://192.168.1.145:8000/api/tickets'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'title': titleController.text,
+          'description': descriptionController.text,
+          'priority': selectedPriority,
+          'category_id': selectedCategoryId,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if ((response.statusCode == 200 || response.statusCode == 201) &&
+          data['status'] == true) {
+        // Clear form
+        titleController.clear();
+        descriptionController.clear();
+        selectedPriority = 'low';
+        selectedCategoryId = null;
+
+        Navigator.of(context).pop(); // Close dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tiket berhasil dibuat')),
+        );
+      } else {
+        throw Exception(data['message'] ?? 'Failed to create ticket');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
   }
 
 
