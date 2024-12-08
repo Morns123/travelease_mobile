@@ -3,10 +3,10 @@ import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/Page/chat_bot.dart';
 import 'package:travelease_mobile/Page/pages/detail_problem_page/detail_problem.dart';
 import 'package:travelease_mobile/service/faq_service.dart';
-import '../components/chat_option.dart';
-import '../components/button_to_view.dart';
-import '../components/problem_category.dart';
-import '../components/button_to_problem_detail.dart';
+import '../../../widget/components/chat_option.dart';
+import '../../../widget/components/button_to_view.dart';
+import '../../../widget/components/problem_category.dart';
+import '../../../widget/components/button_to_problem_detail.dart';
 
 class HelpCenterPage extends StatefulWidget {
   final String token;

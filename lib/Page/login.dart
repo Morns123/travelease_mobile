@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/HomePage.dart';
-import 'package:travelease_mobile/Page/ReportPage.dart';
-import 'package:travelease_mobile/Page/profile.dart';
 import 'package:travelease_mobile/Page/register.dart';
 import 'package:travelease_mobile/service/api_service.dart';
 
@@ -95,7 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: _login, child: Text('Login'),
+                onPressed: _login, child: Text('Login',
+                style: TextStyle(color: Colors.white),
+                ),
                 
               ),
               const SizedBox(height: 20),

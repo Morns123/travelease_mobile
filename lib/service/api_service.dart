@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:travelease_mobile/contoh/gabut.dart';
 
 class ApiService {
-  final String baseUrl = 'http://192.168.1.145:8000/api'; // Ganti dengan URL API Anda
+  final String baseUrl = 'http://192.168.1.10:8000/api'; // Ganti dengan URL API Anda
 
   Future<Map<String, dynamic>> register(String name, String email, String password, String passwordConfirmation) async {
     final response = await http.post(
@@ -61,13 +61,7 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
-  Future<Map<String, dynamic>> logout(String token) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/logout'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-    return jsonDecode(response.body);
-  }
+ 
 
 
 

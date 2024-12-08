@@ -100,7 +100,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.145:8000/api/tickets/${widget.ticket.id}/messages'),
+        Uri.parse('http://192.168.1.10:8000/api/tickets/${widget.ticket.id}/messages'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.145:8000/api/tickets/${widget.ticket.id}/messages'),
+        Uri.parse('http://192.168.1.10:8000/api/tickets/${widget.ticket.id}/messages'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

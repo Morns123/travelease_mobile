@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:travelease_mobile/Page/ReportPage.dart';
 import 'package:travelease_mobile/Page/chat_bot.dart';
-import 'package:travelease_mobile/Page/pages/components/button_article.dart';
+import 'package:travelease_mobile/widget/components/button_article.dart';
 import 'package:travelease_mobile/service/faq_service.dart';
-import '../components/chat_option.dart';
+import '../../../widget/components/chat_option.dart';
 
 class DetailProblemPage extends StatefulWidget {
   final String subsCategory;

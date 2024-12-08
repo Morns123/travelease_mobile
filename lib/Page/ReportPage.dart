@@ -63,7 +63,6 @@ class _ReportPageState extends State<ReportPage> {
               ],
             ),
           ),
-        SizedBox(height: 30,),
         Expanded(child: displaywidget),
         ],
       ),

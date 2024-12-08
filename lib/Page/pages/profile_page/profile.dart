@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:travelease_mobile/Page/pages/components/field.dart';
+import 'package:travelease_mobile/Page/login.dart';
+import 'package:travelease_mobile/widget/components/field.dart';
 import 'package:travelease_mobile/service/api_service.dart';
+import 'package:http/http.dart' as http;
+
 
 class ProfilePage extends StatefulWidget {
   final String token;
@@ -11,6 +14,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late String token;
   bool isEditing = false;
  final ApiService apiService = ApiService();
   final TextEditingController _nameController = TextEditingController();
@@ -20,6 +24,32 @@ class _ProfilePageState extends State<ProfilePage> {
    void initState() {
     super.initState();
     _fetchUserProfile();
+    
+  }
+
+  Future<void> logout(BuildContext context) async {
+    token = widget.token;
+    final response = await http.post(
+      Uri.parse('http://192.168.1.10:8000/api/logout'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Logout berhasil
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully logged out')),
+      );
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    } else {
+      // Logout gagal
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to logout: ${response.body}')),
+      );
+    }
   }
 
   void _fetchUserProfile() async {
@@ -68,13 +98,30 @@ void _updateProfile() async {
       appBar: AppBar(
         backgroundColor: Color(0xff6799C3),
         foregroundColor: Colors.white,
+        actions: [
+          InkWell(
+            onTap: () => logout(context),
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 244, 85, 74),
+                      borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    child: Icon(Icons.logout,color: Colors.white,),
+                  ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Stack(
           children: [
+            
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                
                 Container(
                   width: double.infinity,
                   height: 200,
@@ -163,7 +210,8 @@ void _updateProfile() async {
       color: Color(0xffffffff),
     ),
   ),
-                )
+                ),
+                
               ],
             ),
             Align(

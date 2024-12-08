@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travelease_mobile/Page/DetailReport.dart';
+import 'package:travelease_mobile/Page/ReportPage.dart';
 class ChatMessage {
   String messageContent;
   String messageType;
@@ -57,6 +59,7 @@ class _ChatBotState extends State<ChatBot> {
   final TextEditingController descriptionController = TextEditingController();
   String selectedPriority = 'low';
   int? selectedCategoryId;
+  int chatcs = 0;
 
 
   @override
@@ -71,7 +74,7 @@ class _ChatBotState extends State<ChatBot> {
       final token = widget.token;
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.145:8000/api/categories'),
+        Uri.parse('http://192.168.1.10:8000/api/categories'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -94,7 +97,7 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   Future<void> _getInitialNodes() async {
-    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/initial'));
+    final response = await http.get(Uri.parse('http://192.168.1.10:8000/api/conversation/initial'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -117,7 +120,7 @@ class _ChatBotState extends State<ChatBot> {
       _messages.add({'type': 'user', 'message': buttonText});
     });
 
-    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/children/$parentId'));
+    final response = await http.get(Uri.parse('http://192.168.1.10:8000/api/conversation/children/$parentId'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -131,7 +134,12 @@ class _ChatBotState extends State<ChatBot> {
           });
         } else {
           _messages.add({'type': 'bot', 'message': data['data']['answer']});
-          Future.delayed(Duration(seconds: 0), () {
+          chatcs++;
+          if (chatcs >= 2) {
+            // Tampilkan tombol setelah 2 kali pengulangan
+            setState(() {});
+          }
+          Future.delayed(Duration(seconds: 1), () {
             _getInitialNodes();
           });
         }
@@ -176,25 +184,7 @@ class _ChatBotState extends State<ChatBot> {
     }
   }
 
-  // metod untuk simulasi in saat ngeklik opsion nya
-  // void _selectOption(String selectedOption) {
-  //   setState(() {
-  //     messages.add(ChatMessage(messageContent: selectedOption, messageType: "sender"));
-  //     messages.add(ChatMessage(
-  //       messageContent:
-  //       // ini balesannya (cuma contoh)
-  //           "Proses pengembalian uang tiket biasanya memerlukan waktu 5 hingga 14 hari kerja, tergantung pada metode pembayaran yang Anda gunakan.",
-  //       messageType: "receiver",
-  //     ));
-  //   });
-  // }
 
-  // umpan balik category
-  // void _onCategoryClick(String categoryName) {
-  //   setState(() {
-  //     messages.add(ChatMessage(messageContent: categoryName, messageType: "sender"));
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +235,7 @@ class _ChatBotState extends State<ChatBot> {
               }
             },
           ),
+           if (chatcs >= 2) 
           Column(mainAxisAlignment: MainAxisAlignment.end,
            children: [
              Container(margin: EdgeInsets.only(bottom: 70, left: 15),
@@ -255,7 +246,7 @@ class _ChatBotState extends State<ChatBot> {
                   borderRadius: BorderRadius.circular(15), 
                 ),
                 child: FloatingActionButton(
-                  heroTag: "chatCsButton",
+                  heroTag: chatcs,
                   onPressed: _showCreateTicketDialog,
                   child: Text(
                     "Chat CS",
@@ -496,7 +487,7 @@ class _ChatBotState extends State<ChatBot> {
       final token = widget.token;
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.145:8000/api/tickets'),
+        Uri.parse('http://192.168.1.10:8000/api/tickets'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -513,13 +504,14 @@ class _ChatBotState extends State<ChatBot> {
 
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           data['status'] == true) {
+            
         // Clear form
         titleController.clear();
         descriptionController.clear();
         selectedPriority = 'low';
         selectedCategoryId = null;
 
-        Navigator.of(context).pop(); // Close dialog
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected:  (int) { }, token: token)));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Tiket berhasil dibuat')),
         );
