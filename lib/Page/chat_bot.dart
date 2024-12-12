@@ -74,7 +74,7 @@ class _ChatBotState extends State<ChatBot> {
       final token = widget.token;
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.10:8000/api/categories'),
+        Uri.parse('http://192.168.1.145:8000/api/categories'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ class _ChatBotState extends State<ChatBot> {
   }
 
   Future<void> _getInitialNodes() async {
-    final response = await http.get(Uri.parse('http://192.168.1.10:8000/api/conversation/initial'));
+    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/initial'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
@@ -120,7 +120,7 @@ class _ChatBotState extends State<ChatBot> {
       _messages.add({'type': 'user', 'message': buttonText});
     });
 
-    final response = await http.get(Uri.parse('http://192.168.1.10:8000/api/conversation/children/$parentId'));
+    final response = await http.get(Uri.parse('http://192.168.1.145:8000/api/conversation/children/$parentId'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -235,7 +235,7 @@ class _ChatBotState extends State<ChatBot> {
               }
             },
           ),
-           if (chatcs >= 2) 
+           if (chatcs >= 1) 
           Column(mainAxisAlignment: MainAxisAlignment.end,
            children: [
              Container(margin: EdgeInsets.only(bottom: 70, left: 15),
@@ -254,7 +254,7 @@ class _ChatBotState extends State<ChatBot> {
                       color: Color(0xFF3C729A), 
                     ),
                   ),
-                  backgroundColor: Colors.white, 
+                  backgroundColor: const Color.fromARGB(145, 255, 255, 255), 
                   elevation: 0, 
                 ),
               ),
@@ -309,14 +309,14 @@ class _ChatBotState extends State<ChatBot> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: message['type'] == 'bot' ? Colors.grey.shade200 : const Color.fromARGB(255, 112, 177, 242),
+            color: message['type'] == 'bot' ? Color(0xFF3C729A) : const Color.fromARGB(255, 112, 177, 242),
           ),
           padding: EdgeInsets.all(16),
           child: Text(
             message['message'],
             style: TextStyle(
               fontSize: 15,
-              color: message['type'] == 'bot' ? Colors.black : const Color.fromARGB(255, 255, 255, 255),
+              color: message['type'] == 'bot' ? const Color.fromARGB(255, 255, 253, 253) : const Color.fromARGB(255, 255, 255, 255),
               ),
           ),
         ),
@@ -331,7 +331,7 @@ class _ChatBotState extends State<ChatBot> {
       padding: EdgeInsets.all(16.0),
       margin: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Color(0xFF3C729A),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -342,6 +342,7 @@ class _ChatBotState extends State<ChatBot> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              color: Colors.white
             ),
           ),
           SizedBox(height: 10),
@@ -361,6 +362,7 @@ class _ChatBotState extends State<ChatBot> {
           _getChildNodes(nodeId, text);
       },
       child: Padding(
+        
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -368,10 +370,10 @@ class _ChatBotState extends State<ChatBot> {
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(fontSize: 14, color: const Color.fromARGB(221, 255, 255, 255)),
               ),
             ),
-            Icon(Icons.chevron_right, color: Colors.grey),
+            Icon(Icons.chevron_right, color: const Color.fromARGB(255, 255, 255, 255)),
           ],
         ),
       ),
@@ -487,7 +489,7 @@ class _ChatBotState extends State<ChatBot> {
       final token = widget.token;
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.10:8000/api/tickets'),
+        Uri.parse('http://192.168.1.145:8000/api/tickets'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

@@ -84,6 +84,15 @@ flutter:
   - family: Montserrat-Bold
     fonts:
      - asset: fonts/Montserrat-Bold.ttf
+  - family: Roboto-Reguler
+    fonts:
+     - asset: fonts/Roboto-Regular.ttf
+  - family: Roboto-Bold
+    fonts:
+     - asset: fonts/Roboto-Bold.ttf
+  - family: Roboto-Medium
+    fonts:
+     - asset: fonts/Roboto-Medium.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

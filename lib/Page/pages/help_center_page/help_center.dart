@@ -50,31 +50,31 @@ class _HelpCenterPageState extends State<HelpCenterPage> {
         ),
         backgroundColor: Colors.white,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(40),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffD9D9D9),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Cari',
-                      hintStyle:
-                          TextStyle(color: Color.fromARGB(255, 197, 197, 197)),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Color.fromARGB(255, 154, 154, 154),
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 15),
+              //   child: Container(
+              //     height: 35,
+              //     decoration: BoxDecoration(
+              //       color: const Color(0xffD9D9D9),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     child: const TextField(
+              //       decoration: InputDecoration(
+              //         hintText: 'Cari',
+              //         hintStyle:
+              //             TextStyle(color: Color.fromARGB(255, 197, 197, 197)),
+              //         prefixIcon: Icon(
+              //           Icons.search,
+              //           color: Color.fromARGB(255, 154, 154, 154),
+              //         ),
+              //         border: InputBorder.none,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 15),

@@ -30,27 +30,16 @@ class _HomeAppState extends State<HomeApp> {
         end: Alignment.centerRight
         )
       ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Color.fromRGBO(103, 153, 195, 1), Color.fromRGBO(194, 223, 248, 1)],
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight
-        )
-      ),
-                  height: 165,       
-                  child: Column(
+      height: 180,
+            child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                       
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        
                              Container(
-                              margin: EdgeInsets.only(top: 24,),
+                              margin: EdgeInsets.only(top: 32),
                               child: ShaderMask(
                                 shaderCallback: (bounds) => LinearGradient(
                                   colors: [Color.fromRGBO(228, 243, 255, 1), Colors.white],
@@ -60,7 +49,7 @@ class _HomeAppState extends State<HomeApp> {
                                 child: Text("TravelEase",style: TextStyle(color: Colors.white,fontSize: 23, fontFamily: "Montserrat-ExtraBold"),))
                               ),
                           
-                            SizedBox(width: 180,),
+                            SizedBox(width: 140,),
                             InkWell(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(token: _token,)));
@@ -79,10 +68,11 @@ class _HomeAppState extends State<HomeApp> {
                         ],
                       ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
                               margin: EdgeInsets.only(top: 20),
-                              width: 370,
+                              width: 350,
                               height: 45,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -101,9 +91,7 @@ class _HomeAppState extends State<HomeApp> {
                         )
                     ],
                   ),
-                )
-              ],
-            ),
+               
           );
   }
 }

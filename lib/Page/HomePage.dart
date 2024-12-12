@@ -51,9 +51,9 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   margin: EdgeInsets.only(left: 10),
-                  child: Text(
+                  child: const Text(
                     "Laporan Teratas",
-                    style: TextStyle(
+                    style:  TextStyle(
                         fontSize: 15,
                         color: Color.fromRGBO(54, 99, 137, 1),
                         fontFamily: "Montserrat-Bold"),
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPage(onCategorySelected: (int) { }, token: _token, )));
                   },
                   child: Container(
-                    child: Row(
+                    child: const Row(
                       children: [
                         Text(
                           "Riwayat Laporan",
@@ -123,13 +123,16 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: 10),
-            CategoryFaq(
-              onSelected: (String category) {
-                setState(() {
-                  selectedCategory = category;
-                  selectedSubcategories.clear(); // Reset selected subcategories when changing category
-                });
-              },
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: CategoryFaq(
+                onSelected: (String category) {
+                  setState(() {
+                    selectedCategory = category;
+                    selectedSubcategories.clear(); // Reset selected subcategories when changing category
+                  });
+                },
+              ),
             ),
             SizedBox(height: 10),
            FutureBuilder<List<dynamic>>(

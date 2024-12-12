@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> logout(BuildContext context) async {
     token = widget.token;
     final response = await http.post(
-      Uri.parse('http://192.168.1.10:8000/api/logout'),
+      Uri.parse('http://192.168.1.145:8000/api/logout'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',

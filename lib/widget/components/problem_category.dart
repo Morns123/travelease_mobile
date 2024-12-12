@@ -26,18 +26,23 @@ class _ProblemCategoryState extends State<ProblemCategory> {
   late Future<List<dynamic>> _categoriesFuture;
   late int selectedButtonIndex;
 
-  // Peta warna untuk setiap kategori
-  final Map<String, Color> categoryColors = {
-    'Penawaran & Promo': Colors.green,
-    'Panduan': Colors.orange,
-    'Umum': Colors.purple,
-  };
+  // Warna tetap berdasarkan urutan kategori
+  final List<Color> fixedColors = [
+    Colors.green,    // Warna pertama: Merah
+    Colors.orange, // Warna kedua: Oranye
+    Colors.purple, // Warna ketiga: Ungu
+  ];
 
   @override
   void initState() {
     super.initState();
     selectedButtonIndex = widget.defaultSelectedIndex;
     _categoriesFuture = getFaqCategoriesWithSubcategoriesAndFaqs(); // Memanggil API
+  }
+
+  // Fungsi untuk mendapatkan warna berdasarkan urutan
+  Color _getFixedColor(int index) {
+    return fixedColors[index % fixedColors.length];
   }
 
   @override
@@ -52,16 +57,11 @@ class _ProblemCategoryState extends State<ProblemCategory> {
         } else if (snapshot.hasData) {
           List<dynamic> categories = snapshot.data!;
 
-          // Filter kategori sesuai kebutuhan
-          categories = categories.where((category) {
-            return categoryColors.containsKey(category['name']);
-          }).toList();
-
           return Row(
             children: categories.asMap().entries.map((entry) {
               int index = entry.key;
               var category = entry.value;
-              return buildButton(index, category['name']); // Ambil nama kategori dari API
+              return buildButton(index, category['name'], _getFixedColor(index));
             }).toList(),
           );
         } else {
@@ -71,35 +71,38 @@ class _ProblemCategoryState extends State<ProblemCategory> {
     );
   }
 
-  Widget buildButton(int index, String categoryName) {
+  Widget buildButton(int index, String categoryName, Color categoryColor) {
     bool isSelected = selectedButtonIndex == index;
 
-    return Padding(
-      padding: const EdgeInsets.only(right: 5),
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            selectedButtonIndex = index;
-          });
-          widget.onSelected(categoryName); // Callback untuk kategori terpilih
-        },
-        style: ButtonStyle(
-          minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
-          backgroundColor: MaterialStatePropertyAll(
-            isSelected ? Colors.white : categoryColors[categoryName], // Warna berdasarkan kategori
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 0, left: 6),
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              selectedButtonIndex = index;
+            });
+            widget.onSelected(categoryName); // Callback untuk kategori terpilih
+          },
+          style: ButtonStyle(
+            minimumSize: const MaterialStatePropertyAll(Size(90, 30)),
+            backgroundColor: MaterialStatePropertyAll(
+              isSelected ? Colors.white : categoryColor, // Warna berdasarkan kategori
+            ),
+            side: isSelected
+                ? MaterialStatePropertyAll(
+                    BorderSide(color: categoryColor, width: 2),
+                  )
+                : MaterialStatePropertyAll(BorderSide.none),
           ),
-          side: isSelected
-              ? MaterialStatePropertyAll(
-                  BorderSide(color: categoryColors[categoryName]!, width: 2),
-                )
-              : MaterialStatePropertyAll(BorderSide.none),
-        ),
-        child: Text(
-          categoryName,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? categoryColors[categoryName] : Colors.white, // Warna teks
+          child: Text(
+            categoryName,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: isSelected ? categoryColor : Colors.white, // Warna teks
+            ),
           ),
         ),
       ),

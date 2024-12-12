@@ -162,7 +162,7 @@ class _Sdg_BerlangsungWigetState extends State<Sdg_BerlangsungWiget>
 
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.10:8000/api/ticket'),
+        Uri.parse('http://192.168.1.145:8000/api/ticket'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',

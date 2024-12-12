@@ -7,7 +7,7 @@ class Ticket_service {
   
   final response = await http.get(
     
-    Uri.parse('http://192.168.1.10:8000/api/ticket'),  // Ganti dengan URL API Anda
+    Uri.parse('http://192.168.1.145:8000/api/ticket'),  // Ganti dengan URL API Anda
   );
 
   if (response.statusCode == 200) {
